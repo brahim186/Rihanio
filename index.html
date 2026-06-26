@@ -76,7 +76,7 @@
   .btn-nav {
     background: var(--purple);
     color: var(--white);
-    border: none;
+    text-decoration: none;
     padding: 10px 20px;
     border-radius: 10px;
     font-size: 13px;
@@ -85,6 +85,7 @@
     letter-spacing: 0.01em;
     transition: all 0.2s;
     white-space: nowrap;
+    display: inline-block;
   }
   .btn-nav:hover { background: #7535f0; transform: translateY(-1px); }
 
@@ -160,6 +161,7 @@
   .btn-primary {
     background: var(--lime);
     color: var(--black);
+    text-decoration: none;
     padding: 14px 28px;
     border-radius: 12px;
     font-size: 15px;
@@ -169,11 +171,13 @@
     transition: all 0.25s;
     box-shadow: 0 0 28px rgba(193,255,114,0.4);
     letter-spacing: -0.01em;
+    display: inline-block;
   }
   .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 0 48px rgba(193,255,114,0.55); background: #d4ff8f; }
   .btn-secondary {
     background: transparent;
     color: rgba(255,255,255,0.75);
+    text-decoration: none;
     padding: 14px 28px;
     border-radius: 12px;
     font-size: 15px;
@@ -181,6 +185,7 @@
     border: 1px solid rgba(255,255,255,0.12);
     cursor: pointer;
     transition: all 0.2s;
+    display: inline-block;
   }
   .btn-secondary:hover { border-color: rgba(255,255,255,0.3); color: var(--white); background: rgba(255,255,255,0.04); }
   .hero-metrics {
@@ -415,7 +420,7 @@
   }
   .btn-submit:hover { background: #7535f0; transform: translateY(-1px); }
   
-  /* أزرار التواصل الاجتماعي */
+  /* SOCIAL BUTTONS CONTAINER */
   .social-buttons-container {
     display: flex;
     justify-content: center;
@@ -526,6 +531,7 @@
 </head>
 <body>
 
+<!-- NAV -->
 <nav>
   <div class="nav-logo">
     <img src="https://i.ibb.co/LXBT6kQM/Untitled-1.png" alt="Logo Rihanio">
@@ -535,18 +541,23 @@
     <li><a href="#apropos">À Propos</a></li>
     <li><a href="#contact">Contact</a></li>
   </ul>
-  <button class="btn-nav">Discutons de votre projet</button>
+  <!-- تم جعل زر النوت التفاعلي ينزل إلى قسم الاتصال مباشرة عند الضغط عليه -->
+  <a href="#contact" class="btn-nav">Discutons de votre projet</a>
 </nav>
 
+<!-- HERO -->
 <section class="hero" id="apropos">
   <div class="hero-bg-glow"></div>
   <div class="hero-badge"><span class="hero-badge-dot"></span>Agence Digitale & Management</div>
   <h1>Propulsez votre <span class="accent-purple">visibilité</span> et vos <span class="accent-lime">rendements immobiliers</span> au niveau supérieur.</h1>
   <p class="hero-sub">Nous combinons la puissance du digital et l'expertise immobilière pour maximiser vos performances et accélérer votre croissance.</p>
+  
+  <!-- الأزرار التفاعلية المحدثة للتنقل السلس داخل الصفحة -->
   <div class="hero-ctas">
-    <button class="btn-primary">Démarrer maintenant →</button>
-    <button class="btn-secondary">Voir nos services</button>
+    <a href="#contact" class="btn-primary">Démarrer maintenant →</a>
+    <a href="#services" class="btn-secondary">Voir nos services</a>
   </div>
+
   <div class="hero-metrics">
     <div class="metric">
       <div class="metric-num lime">+250%</div>
@@ -565,12 +576,14 @@
 
 <div class="section-divider"></div>
 
+<!-- SERVICES -->
 <section class="services" id="services">
   <span class="section-label">Nos expertises</span>
   <h2 class="section-title">Des solutions <span>complètes</span> sur mesure</h2>
 
   <div class="bento">
 
+    <!-- Card 1 — Réseaux Sociaux (wide) -->
     <div class="bento-card wide">
       <div class="card-glow glow-purple"></div>
       <div class="card-num">01</div>
@@ -581,6 +594,7 @@
       <div class="card-text">Création de contenu complet (visuels et textes), planification des publications, et animation quotidienne de vos communautés pour bâtir une présence forte et engagée.</div>
     </div>
 
+    <!-- Card 2 — Site Internet (narrow) -->
     <div class="bento-card narrow">
       <div class="card-glow glow-lime"></div>
       <div class="card-num">02</div>
@@ -591,6 +605,7 @@
       <div class="card-text">Conception et développement de sites vitrines et de boutiques e-commerce modernes, rapides et adaptés aux mobiles.</div>
     </div>
 
+    <!-- Card 3 — Airbnb (full) -->
     <div class="bento-card full">
       <div class="card-glow glow-yellow"></div>
       <div class="card-pill">Service Premium</div>
@@ -618,6 +633,7 @@
       </div>
     </div>
 
+    <!-- Card 4 — Rentabilité (half) -->
     <div class="bento-card half">
       <div class="card-glow glow-pink"></div>
       <div class="card-num">04</div>
@@ -628,13 +644,14 @@
       <div class="card-text">Nous aidons les entrepreneurs et les investisseurs immobiliers à valider la viabilité financière de leurs projets avant de s'engager.</div>
     </div>
 
+    <!-- CTA mini card -->
     <div class="bento-card half" style="display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;background:linear-gradient(135deg,rgba(94,23,235,0.25),rgba(94,23,235,0.05));border-color:rgba(94,23,235,0.3);">
       <div class="cta-icon-box">
         <img src="https://i.ibb.co/Kj0pV6Lx/image.png" alt="Prêt à scaler">
       </div>
       <div style="font-size:18px;font-weight:700;margin-bottom:10px;letter-spacing:-0.02em;">Prêt à scaler ?</div>
-      <div style="font-size:13px;color:var(--gray-text);margin-bottom:24px;">Discutons de vos objectifs et construisons ensemble votre stratégie de croissance.</div>
-      <button class="btn-primary" style="font-size:13px;padding:11px 22px;">Prendre rendez-vous →</button>
+      <div style="font-size:13px;color:var(--gray-text);margin-bottom:24px;">Discutons de vos objectifs et construisons ensemble votre战略 de croissance.</div>
+      <a href="#contact" class="btn-primary" style="font-size:13px;padding:11px 22px;">Prendre rendez-vous →</a>
     </div>
 
   </div>
@@ -642,14 +659,17 @@
 
 <div class="section-divider"></div>
 
+<!-- CONTACT -->
 <section class="contact" id="contact">
   <div class="contact-box">
     <div class="contact-glow"></div>
     <span class="section-label" style="display:block;margin-bottom:14px;">Contact</span>
     <h2>Parlons de votre <span style="color:var(--purple)">projet</span></h2>
-    <p>Laissez-nous votre nom, e-mail, <b>numéro de téléphone</b> et les détails de votre projet. Nous vous répondrons sous 24h.</p>
+    <p>Laissez-nous votre nom, e-mail, <b>numéro de téléphone</b> et les détails de votre projet. Nous vous répondrون sous 24h.</p>
 
+    <!-- توجيه بيانات الفورم مباشرة إلى بريدك الإلكتروني عبر Formsubmit -->
     <form class="contact-form" action="https://formsubmit.co/erraihanibrahim186@gmail.com" method="POST">
+      <!-- تعطيل الكابتشا المزعجة لتسهيل تجربة العميل -->
       <input type="hidden" name="_captcha" value="false">
       
       <input type="text" name="Nom Complet" placeholder="Votre nom complet" required>
@@ -668,6 +688,7 @@
       </div>
     </div>
 
+    <!-- أزرار وسائل التواصل الاجتماعي مصفوفة جنباً إلى جنب بشكل تفاعلي -->
     <div class="social-buttons-container">
       <a class="insta-btn" href="https://www.instagram.com/rihanio_?igsh=MTN0Y2g4NjN4NnNuOQ%3D%3D&utm_source=qr" target="_blank" rel="noopener noreferrer">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="white"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
@@ -684,6 +705,7 @@
   </div>
 </section>
 
+<!-- FOOTER -->
 <footer>
   <div class="footer-left">
     <div class="footer-logo">

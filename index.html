@@ -259,6 +259,7 @@
   .bento-card.narrow { grid-column: span 5; }
   .bento-card.full { grid-column: span 12; }
   .bento-card.half { grid-column: span 6; }
+  
   .card-icon {
     width: 48px;
     height: 48px;
@@ -266,13 +267,33 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 22px;
     margin-bottom: 20px;
+    overflow: hidden;
   }
-  .icon-purple { background: rgba(94,23,235,0.2); color: #a06aff; }
-  .icon-lime { background: rgba(193,255,114,0.12); color: var(--lime); }
-  .icon-yellow { background: rgba(234,255,7,0.12); color: var(--yellow); }
-  .icon-pink { background: rgba(255,100,180,0.12); color: #ff78c4; }
+  .card-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+  .icon-purple { background: rgba(94,23,235,0.2); }
+  .icon-lime { background: rgba(193,255,114,0.12); }
+  .icon-yellow { background: rgba(234,255,7,0.12); }
+  .icon-pink { background: rgba(255,100,180,0.12); }
+  
+  .cta-icon-box {
+    width: 64px;
+    height: 64px;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .cta-icon-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
   .card-num {
     font-size: 11px;
     color: var(--gray-text);
@@ -393,6 +414,16 @@
     transition: all 0.2s;
   }
   .btn-submit:hover { background: #7535f0; transform: translateY(-1px); }
+  
+  /* أزرار التواصل الاجتماعي */
+  .social-buttons-container {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    max-width: 500px;
+    margin: 0 auto;
+  }
   .insta-btn {
     display: inline-flex;
     align-items: center;
@@ -400,16 +431,33 @@
     background: linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045);
     color: var(--white);
     text-decoration: none;
-    padding: 14px 28px;
+    padding: 14px 24px;
     border-radius: 14px;
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 600;
     transition: all 0.25s;
     box-shadow: 0 0 30px rgba(253,29,29,0.25);
     position: relative;
   }
   .insta-btn:hover { transform: translateY(-2px); box-shadow: 0 0 50px rgba(253,29,29,0.35); }
-  .insta-icon { font-size: 20px; }
+  
+  .whatsapp-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: #25D366;
+    color: var(--white);
+    text-decoration: none;
+    padding: 14px 24px;
+    border-radius: 14px;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.25s;
+    box-shadow: 0 0 30px rgba(37, 211, 102, 0.25);
+    position: relative;
+  }
+  .whatsapp-btn:hover { transform: translateY(-2px); box-shadow: 0 0 50px rgba(37, 211, 102, 0.35); }
+
   .insta-label { font-size: 12px; color: var(--gray-text); margin-top: 16px; }
 
   /* FOOTER */
@@ -471,12 +519,13 @@
     .contact-box { padding: 40px 24px; }
     footer { flex-direction: column; align-items: flex-start; }
     .hero-metrics { gap: 28px; }
+    .social-buttons-container { flex-direction: column; width: 100%; }
+    .insta-btn, .whatsapp-btn { width: 100%; justify-content: center; }
   }
 </style>
 </head>
 <body>
 
-<!-- NAV -->
 <nav>
   <div class="nav-logo">
     <img src="https://i.ibb.co/LXBT6kQM/Untitled-1.png" alt="Logo Rihanio">
@@ -489,7 +538,6 @@
   <button class="btn-nav">Discutons de votre projet</button>
 </nav>
 
-<!-- HERO -->
 <section class="hero" id="apropos">
   <div class="hero-bg-glow"></div>
   <div class="hero-badge"><span class="hero-badge-dot"></span>Agence Digitale & Management</div>
@@ -517,39 +565,41 @@
 
 <div class="section-divider"></div>
 
-<!-- SERVICES -->
 <section class="services" id="services">
   <span class="section-label">Nos expertises</span>
   <h2 class="section-title">Des solutions <span>complètes</span> sur mesure</h2>
 
   <div class="bento">
 
-    <!-- Card 1 — Réseaux Sociaux (wide) -->
     <div class="bento-card wide">
       <div class="card-glow glow-purple"></div>
       <div class="card-num">01</div>
-      <div class="card-icon icon-purple">📱</div>
+      <div class="card-icon icon-purple">
+        <img src="https://i.ibb.co/Qh3PHsp/image.png" alt="Gestion des Réseaux Sociaux">
+      </div>
       <div class="card-title">Gestion des Réseaux Sociaux</div>
       <div class="card-text">Création de contenu complet (visuels et textes), planification des publications, et animation quotidienne de vos communautés pour bâtir une présence forte et engagée.</div>
     </div>
 
-    <!-- Card 2 — Site Internet (narrow) -->
     <div class="bento-card narrow">
       <div class="card-glow glow-lime"></div>
       <div class="card-num">02</div>
-      <div class="card-icon icon-lime">🌐</div>
+      <div class="card-icon icon-lime">
+        <img src="https://i.ibb.co/RkWTf6dw/image.png" alt="Création de Site Internet">
+      </div>
       <div class="card-title">Création de Site Internet</div>
       <div class="card-text">Conception et développement de sites vitrines et de boutiques e-commerce modernes, rapides et adaptés aux mobiles.</div>
     </div>
 
-    <!-- Card 3 — Airbnb (full) -->
     <div class="bento-card full">
       <div class="card-glow glow-yellow"></div>
       <div class="card-pill">Service Premium</div>
       <div style="display:flex;gap:40px;align-items:flex-start;flex-wrap:wrap;">
         <div style="flex:0 0 auto;">
           <div class="card-num">03</div>
-          <div class="card-icon icon-yellow">🏡</div>
+          <div class="card-icon icon-yellow">
+            <img src="https://i.ibb.co/LXfP8x1N/image.png" alt="Gestion Airbnb & Locations Saisonnières">
+          </div>
         </div>
         <div style="flex:1;min-width:260px;">
           <div class="card-title">Gestion Airbnb & Locations Saisonnières</div>
@@ -568,18 +618,20 @@
       </div>
     </div>
 
-    <!-- Card 4 — Rentabilité (half) -->
     <div class="bento-card half">
       <div class="card-glow glow-pink"></div>
       <div class="card-num">04</div>
-      <div class="card-icon icon-pink">📊</div>
+      <div class="card-icon icon-pink">
+        <img src="https://i.ibb.co/b55bV4Xc/image.png" alt="Étude de Rentabilité & Modélisation Financière">
+      </div>
       <div class="card-title">Étude de Rentabilité & Modélisation Financière</div>
       <div class="card-text">Nous aidons les entrepreneurs et les investisseurs immobiliers à valider la viabilité financière de leurs projets avant de s'engager.</div>
     </div>
 
-    <!-- CTA mini card -->
     <div class="bento-card half" style="display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;background:linear-gradient(135deg,rgba(94,23,235,0.25),rgba(94,23,235,0.05));border-color:rgba(94,23,235,0.3);">
-      <div style="font-size:32px;margin-bottom:14px;">🚀</div>
+      <div class="cta-icon-box">
+        <img src="https://i.ibb.co/Kj0pV6Lx/image.png" alt="Prêt à scaler">
+      </div>
       <div style="font-size:18px;font-weight:700;margin-bottom:10px;letter-spacing:-0.02em;">Prêt à scaler ?</div>
       <div style="font-size:13px;color:var(--gray-text);margin-bottom:24px;">Discutons de vos objectifs et construisons ensemble votre stratégie de croissance.</div>
       <button class="btn-primary" style="font-size:13px;padding:11px 22px;">Prendre rendez-vous →</button>
@@ -590,20 +642,23 @@
 
 <div class="section-divider"></div>
 
-<!-- CONTACT -->
 <section class="contact" id="contact">
   <div class="contact-box">
     <div class="contact-glow"></div>
     <span class="section-label" style="display:block;margin-bottom:14px;">Contact</span>
     <h2>Parlons de votre <span style="color:var(--purple)">projet</span></h2>
-    <p>Envoyez-nous un message ou retrouvez-nous sur Instagram. We répondons sous 24h.</p>
+    <p>Laissez-nous votre nom, e-mail, <b>numéro de téléphone</b> et les détails de votre projet. Nous vous répondrons sous 24h.</p>
 
-    <div class="contact-form">
-      <input type="text" placeholder="Votre nom complet">
-      <input type="email" placeholder="Votre adresse e-mail">
-      <textarea placeholder="Décrivez votre projet..."></textarea>
-      <button class="btn-submit">Envoyer le message</button>
-    </div>
+    <form class="contact-form" action="https://formsubmit.co/erraihanibrahim186@gmail.com" method="POST">
+      <input type="hidden" name="_captcha" value="false">
+      
+      <input type="text" name="Nom Complet" placeholder="Votre nom complet" required>
+      <input type="email" name="Email" placeholder="Votre adresse e-mail" required>
+      <input type="tel" name="Téléphone" placeholder="Votre numéro de téléphone (Ex: +212...)" required>
+      <textarea name="Message" placeholder="Décrivez votre projet..." required></textarea>
+      
+      <button type="submit" class="btn-submit">Envoyer le message</button>
+    </form>
 
     <div style="position:relative;margin:8px 0 24px;">
       <div style="display:flex;align-items:center;gap:14px;">
@@ -613,15 +668,22 @@
       </div>
     </div>
 
-    <a class="insta-btn" href="https://www.instagram.com/rihanio_?igsh=MTN0Y2g4NjN4NnNuOQ%3D%3D&utm_source=qr" target="_blank" rel="noopener noreferrer">
-      <svg class="insta-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="white"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-      Suivez-nous sur Instagram
-    </a>
+    <div class="social-buttons-container">
+      <a class="insta-btn" href="https://www.instagram.com/rihanio_?igsh=MTN0Y2g4NjN4NnNuOQ%3D%3D&utm_source=qr" target="_blank" rel="noopener noreferrer">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="white"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+        Instagram
+      </a>
+      
+      <a class="whatsapp-btn" href="https://wa.me/message/PJUPSWIQIMINB1" target="_blank" rel="noopener noreferrer">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="white"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.513 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.713-1.453L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.413 9.863-9.847.001-2.63-1.019-5.101-2.872-6.958C16.612 1.943 14.135.923 11.51.923c-5.44 0-9.866 4.415-9.869 9.848-.001 1.745.474 3.426 1.378 4.922l-.993 3.624 3.712-.973zm13.021-7.132c-.351-.177-2.08-1.026-2.402-1.143-.323-.118-.558-.177-.793.177-.235.354-.91 1.143-1.115 1.378-.205.236-.41.265-.762.088-2.417-1.211-3.328-1.748-4.605-3.939-.336-.577.336-.536.963-1.791.106-.206.053-.383-.026-.56-.079-.177-.793-1.912-1.087-2.62-.286-.688-.577-.595-.793-.605-.205-.01-.44-.012-.675-.012-.235 0-.616.088-.939.442-.323.354-1.232 1.207-1.232 2.944 0 1.737 1.262 3.416 1.439 3.652.177.236 2.486 3.797 6.02 5.323.841.363 1.497.58 2.01.742.845.269 1.615.23 2.222.14.678-.1 2.08-.85 2.373-1.67.293-.82.293-1.522.205-1.67-.088-.147-.323-.235-.675-.412z"/></svg>
+        WhatsApp
+      </a>
+    </div>
+    
     <div class="insta-label">@rihanio_ · Rejoignez notre communauté</div>
   </div>
 </section>
 
-<!-- FOOTER -->
 <footer>
   <div class="footer-left">
     <div class="footer-logo">

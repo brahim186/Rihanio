@@ -1518,45 +1518,168 @@
       element.style.display = 'none';
     });
   }
-async function sendMiaMessage() {
-    const text = miaInput.value.trim();
-    if (!text || !selectedLanguage) return;
 
-    // 1. عرض رسالة المستخدم في الواجهة
+  /* ------------------------------------------- */
+  /* CHATBOT FUNCTIONS (MIA)         */
+  /* ------------------------------------------- */
+  const miaWindow = document.getElementById('mia-window');
+  const miaInput = document.getElementById('mia-input');
+  const miaChatBody = document.getElementById('mia-chat-body');
+  
+  let selectedLanguage = "";
+
+  const langInterfaces = {
+    ar: { dir: "rtl", align: "right", placeholder: "اطرح سؤالاً...", disclaimer: "⚠ الإجابات تولد تلقائياً وقد تحتوي على أخطاء. <a href='#services'>مزيد من المعلومات</a>.", timeline: "اليوم", badge: "نسخة تجريبية", flexDir: "row-reverse" },
+    mor: { dir: "rtl", align: "right", placeholder: "سولني شي حاجة...", disclaimer: "⚠ الأجوبة كتخرج أوتوماتيك وتقدر تغلط. <a href='#services'>معلومات أكثر</a>.", timeline: "اليوم", badge: "نسخة تجريبية", flexDir: "row-reverse" },
+    fr: { dir: "ltr", align: "left", placeholder: "Posez une question...", disclaimer: "⚠ Les réponses de l'IA peuvent contenir des erreurs. <a href='#services'>Plus d'infos</a>.", timeline: "Aujourd'hui", badge: "Beta", flexDir: "row" },
+    en: { dir: "ltr", align: "left", placeholder: "Ask a question...", disclaimer: "⚠ AI responses may contain inaccuracies. <a href='#services'>More info</a>.", timeline: "Today", badge: "Beta", flexDir: "row" }
+  };
+
+  const langWelcomes = {
+    ar: "ممتاز! تم تفعيل اللغة العربية. كيف يمكنني مساعدتك اليوم بخصوص خدمات Rihanio؟",
+    mor: "صافي واجدة! دبا نهدرو بالدارجة. باش قدرنا نعاونوك اليوم فالمشروع ديالك؟",
+    fr: "Parfait! Langue française activée. Comment puis-je vous aider aujourd'hui avec les services de Rihanio?",
+    en: "Perfect! English language activated. How can I help you today with Rihanio's services?"
+  };
+
+  function toggleMiaChat() {
+    if (miaWindow.style.display === 'flex') {
+      miaWindow.style.display = 'none';
+    } else {
+      miaWindow.style.display = 'flex';
+      miaChatBody.scrollTop = miaChatBody.scrollHeight;
+    }
+  }
+
+  function handleMiaKey(e) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      sendMiaMessage();
+    }
+  }
+
+  function selectMiaLanguage(lang) {
+    selectedLanguage = lang;
+    const config = langInterfaces[lang];
+
+    miaWindow.style.direction = config.dir;
+    miaWindow.style.textAlign = config.align;
+    miaInput.placeholder = config.placeholder;
+    miaInput.disabled = false;
+    
+    document.getElementById('mia-disclaimer-text').innerHTML = config.disclaimer;
+    document.getElementById('mia-timeline-text').textContent = config.timeline;
+    document.getElementById('mia-badge-text').textContent = config.badge;
+    document.getElementById('mia-header-element').style.flexDirection = config.flexDir;
+    document.getElementById('mia-header-element').querySelector('.mia-header-title').style.flexDirection = config.flexDir;
+    document.getElementById('mia-header-element').querySelector('.mia-header-actions').style.flexDirection = config.flexDir;
+    document.getElementById('mia-input-box-container').style.flexDirection = config.flexDir;
+
+    if(config.dir === "rtl") {
+      document.getElementById('mia-send-button-element').style.transform = "scaleX(-1)";
+    } else {
+      document.getElementById('mia-send-button-element').style.transform = "scaleX(1)";
+    }
+
+    document.getElementById('mia-lang-container').style.display = "none";
+
+    const timeStr = new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+    const welcomeHTML = `
+      <div class="mia-msg-wrapper bot" style="flex-direction: ${config.flexDir}; margin-top: 10px;">
+        <div class="mia-avatar" style="${config.dir === 'rtl' ? 'margin-left:10px; margin-right:0;' : 'margin-right:10px; margin-left:0;'}">
+          <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80" alt="Mia AI">
+        </div>
+        <div class="mia-bubble-container">
+          <div class="mia-bubble" style="background: white; color: #111; ${config.dir === 'rtl' ? 'border-top-left-radius:14px; border-top-right-radius:2px;' : 'border-top-right-radius:14px; border-top-left-radius:2px;'}">${langWelcomes[lang]}</div>
+          <div class="mia-time" style="align-self: ${config.dir === 'rtl' ? 'flex-start' : 'flex-end'};">${timeStr}</div>
+        </div>
+      </div>
+    `;
+    miaChatBody.insertAdjacentHTML('beforeend', welcomeHTML);
+    miaChatBody.scrollTop = miaChatBody.scrollHeight;
+  }
+
+  function sendMiaMessage() {
+    const text = miaInput.value.trim();
+    if (!text) return;
+
     const timeStr = new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
     const config = langInterfaces[selectedLanguage];
-    
-    // (هنا يوضع كود إضافة رسالة المستخدم لـ HTML الذي لديك بالفعل)
-    miaChatBody.insertAdjacentHTML('beforeend', `...`); 
+
+    const userMsgHTML = `
+      <div class="mia-msg-wrapper user" style="flex-direction: ${config.flexDir}; align-self: flex-end;">
+        <div class="mia-avatar" style="background:#555; ${config.dir === 'rtl' ? 'margin-right:10px; margin-left:0;' : 'margin-left:10px; margin-right:0;'}">
+          <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&auto=format&fit=crop&q=80" alt="User">
+        </div>
+        <div class="mia-bubble-container">
+          <div class="mia-bubble" style="background: var(--purple); color: var(--white); ${config.dir === 'rtl' ? 'border-top-right-radius:14px; border-top-left-radius:2px;' : 'border-top-left-radius:14px; border-top-right-radius:2px;'}">${text}</div>
+          <div class="mia-time" style="align-self: ${config.dir === 'rtl' ? 'flex-end' : 'flex-start'};">${timeStr}</div>
+        </div>
+      </div>
+    `;
+    miaChatBody.insertAdjacentHTML('beforeend', userMsgHTML);
     miaInput.value = '';
+    miaChatBody.scrollTop = miaChatBody.scrollHeight;
 
-    // 2. الاتصال بـ API الخاص بنا (هذا هو الجزء الأهم)
-    try {
-        const response = await fetch('/api', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ 
-                message: text, 
-                lang: selectedLanguage 
-            })
-        });
+    setTimeout(() => {
+      let botResponse = "";
+      const lowText = text.toLowerCase();
 
-        const data = await response.json();
-        
-        if (data && data.reply) {
-            // 3. عرض رد البوت الذكي القادم من Gemini
-            const botMsgHTML = `
-                <div class="mia-msg-wrapper bot" style="flex-direction: ${config.flexDir}; align-self: flex-start;">
-                    <div class="mia-bubble">${data.reply}</div>
-                </div>
-            `;
-            miaChatBody.insertAdjacentHTML('beforeend', botMsgHTML);
+      if (selectedLanguage === "ar") {
+        botResponse = "شكراً لرسالتك! سيقوم أحد مستشاري فريق Rihanio بمراجعة طلبك والتواصل معك في أقرب وقت. يمكنك أيضاً حجز موعد مباشرة عبر الموقع.";
+        if (lowText.includes('اربنب') || lowText.includes('airbnb') || lowText.includes('عقار')) {
+          botResponse = "تتيح لك خدمة تسيير Airbnb Premium زيادة عوائدك بنسبة 40% في المتوسط بفضل إدارتنا المتكاملة 24/7. هل ترغب في جدولة دراسة ربحية لعقارك؟";
+        } else if (lowText.includes('موقع') || lowText.includes('ويب') || lowText.includes('برمجة')) {
+          botResponse = "نحن نتميز بتصميم مواقع تعريفية ومتاجر إلكترونية حديثة، فائقة السرعة ومتوافقة مع معايير الـ SEO لجذب أكبر عدد من العملاء.";
+        } else if (lowText.includes('موعد') || lowText.includes('حجز')) {
+          botResponse = "يمكنك اختيار الوقت المناسب لك مباشرة من خلال قسم 'طلب موعد' على موقعنا، وستتمكن من تحميل تأكيد الحجز بصيغة PDF فوراً.";
         }
-    } catch (error) {
-        console.error("خطأ:", error);
-    }
-}
-        // في حال فشل الاتصال، يمكنك ترك رد احتياطي بسيط
+      } 
+      else if (selectedLanguage === "mor") {
+        botResponse = "لهلا يخطيك، شكراً على الميساج ديالك! واحد من الفريق ديال Rihanio غادي يجاوبك فبلاصة. تقدر كاع تشد رنديفو ديريكت من السيت.";
+        if (lowText.includes('اربنب') || lowText.includes('airbnb') || lowText.includes('دار') || lowText.includes('عقار')) {
+          botResponse = "الخدمة ديال تسيير Airbnb Premium كطلع ليك المداخيل بـ 40% فالمعدل حيت كنهزو عليك ثقل الكراء والمقابلات 24/7. واش بغيتي نديرو دراسة للربح ديال دارك؟";
+        } else if (lowText.includes('موقع') || lowText.includes('سيت') || lowText.includes('ويب')) {
+          botResponse = "كنقادو سيتات ويب ومتاجر إلكترونية ناضية، خفيفة وبديزاين عصري لي يجيب ليك كليان جداد تال عندك.";
+        } else if (lowText.includes('موعد') || lowText.includes('رنديفو') || lowText.includes('بغات تشد')) {
+          botResponse = "تقدر تعزل النهار والوقت لي مسلكك فالفورمولير ديال الحجز الفوق، ومن بعد تيليشارجي الورقة ديالك PDF.";
+        }
+      } 
+      else if (selectedLanguage === "en") {
+        botResponse = "Thank you for your message! A consultant from Rihanio's team will review your request and get back to you shortly. You can also book an appointment directly through our form.";
+        if (lowText.includes('airbnb') || lowText.includes('property') || lowText.includes('rental')) {
+          botResponse = "Our Premium Airbnb Management helps increase your revenue by 40% on average with 24/7 support. Would you like to schedule a profitability assessment?";
+        } else if (lowText.includes('website') || lowText.includes('web') || lowText.includes('development')) {
+          botResponse = "We design modern, fast, and SEO-optimized landing pages and e-commerce stores to scale up your sales.";
+        } else if (lowText.includes('book') || lowText.includes('appointment') || lowText.includes('meeting')) {
+          botResponse = "You can instantly select your preferred slot in our booking section and download your official confirmation as a PDF.";
+        }
+      } 
+      else {
+        botResponse = "Merci pour votre message! Un conseiller de l'équipe Rihanio va analyser votre demande et vous recontactera sous peu. Vous pouvez également réserver un créneau via notre formulaire.";
+        if (lowText.includes('airbnb') || lowText.includes('immob') || lowText.includes('location')) {
+          botResponse = "Notre service Premium Airbnb vous permet d'augmenter vos revenus de +40% en moyenne grâce à notre gestion intégrale 24/7. Souhaitez-vous planifier une étude de rentabilité?";
+        } else if (lowText.includes('site') || lowText.includes('web') || lowText.includes('digital')) {
+          botResponse = "Nous concevons des sites vitrines et e-commerce modernes, ultra-rapides et optimisés SEO pour maximiser vos conversions.";
+        } else if (lowText.includes('rdv') || lowText.includes('rendez-vous') || lowText.includes('reserver')) {
+          botResponse = "Vous pouvez choisir votre créneau préféré directement dans la section 'Prendre RDV' de notre site web. C'est simple et vous recevrez un PDF instantané.";
+        }
+      }
+
+      const botMsgHTML = `
+        <div class="mia-msg-wrapper bot" style="flex-direction: ${config.flexDir}; align-self: flex-start;">
+          <div class="mia-avatar" style="${config.dir === 'rtl' ? 'margin-left:10px; margin-right:0;' : 'margin-right:10px; margin-left:0;'}">
+            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80" alt="Mia AI">
+          </div>
+          <div class="mia-bubble-container">
+            <div class="mia-bubble" style="background: white; color: #111; ${config.dir === 'rtl' ? 'border-top-left-radius:14px; border-top-right-radius:2px;' : 'border-top-right-radius:14px; border-top-left-radius:2px;'}">${botResponse}</div>
+            <div class="mia-time" style="align-self: ${config.dir === 'rtl' ? 'flex-start' : 'flex-end'};">${timeStr}</div>
+          </div>
+        </div>
+      `;
+      miaChatBody.insertAdjacentHTML('beforeend', botMsgHTML);
+      miaChatBody.scrollTop = miaChatBody.scrollHeight;
+    }, 1000);
   }
 </script>
 

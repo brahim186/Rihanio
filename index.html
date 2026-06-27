@@ -1518,9 +1518,21 @@
       element.style.display = 'none';
     });
   }
-// بدلاً من الـ setTimeout القديمة، سنقوم بالاتصال بـ API الذكاء الاصطناعي
+async function sendMiaMessage() {
+    const text = miaInput.value.trim();
+    if (!text || !selectedLanguage) return;
+
+    // 1. عرض رسالة المستخدم في الواجهة
+    const timeStr = new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+    const config = langInterfaces[selectedLanguage];
+    
+    // (هنا يوضع كود إضافة رسالة المستخدم لـ HTML الذي لديك بالفعل)
+    miaChatBody.insertAdjacentHTML('beforeend', `...`); 
+    miaInput.value = '';
+
+    // 2. الاتصال بـ API الخاص بنا (هذا هو الجزء الأهم)
     try {
-        const response = await fetch('rihanio.erraihanibrahim186.workers.dev', {
+        const response = await fetch('/api', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ 
@@ -1530,24 +1542,20 @@
         });
 
         const data = await response.json();
-        const botResponse = data.reply; // الرد القادم من Gemini
-
-        const botMsgHTML = `
-            <div class="mia-msg-wrapper bot" style="flex-direction: ${config.flexDir}; align-self: flex-start;">
-                <div class="mia-avatar" style="${config.dir === 'rtl' ? 'margin-left:10px; margin-right:0;' : 'margin-right:10px; margin-left:0;'}">
-                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80" alt="Mia AI">
+        
+        if (data && data.reply) {
+            // 3. عرض رد البوت الذكي القادم من Gemini
+            const botMsgHTML = `
+                <div class="mia-msg-wrapper bot" style="flex-direction: ${config.flexDir}; align-self: flex-start;">
+                    <div class="mia-bubble">${data.reply}</div>
                 </div>
-                <div class="mia-bubble-container">
-                    <div class="mia-bubble" style="background: white; color: #111; ${config.dir === 'rtl' ? 'border-top-left-radius:14px; border-top-right-radius:2px;' : 'border-top-right-radius:14px; border-top-left-radius:2px;'}">${botResponse}</div>
-                    <div class="mia-time" style="align-self: ${config.dir === 'rtl' ? 'flex-start' : 'flex-end'};">${timeStr}</div>
-                </div>
-            </div>
-        `;
-        miaChatBody.insertAdjacentHTML('beforeend', botMsgHTML);
-        miaChatBody.scrollTop = miaChatBody.scrollHeight;
-
+            `;
+            miaChatBody.insertAdjacentHTML('beforeend', botMsgHTML);
+        }
     } catch (error) {
-        console.error("Error connecting to AI:", error);
+        console.error("خطأ:", error);
+    }
+}
         // في حال فشل الاتصال، يمكنك ترك رد احتياطي بسيط
   }
 </script>

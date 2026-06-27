@@ -5,8 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Rihanio — Agence Digitale & Management</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 
 <style>
@@ -77,6 +76,43 @@
     transition: color 0.2s;
   }
   .nav-links a:hover { color: var(--white); }
+
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  /* LANGUAGE SWITCHER */
+  .lang-switcher {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 10px;
+    padding: 4px;
+  }
+  .lang-btn {
+    background: transparent;
+    border: none;
+    color: rgba(255,255,255,0.5);
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 5px 10px;
+    border-radius: 7px;
+    transition: all 0.2s;
+    font-family: 'Inter', sans-serif;
+    letter-spacing: 0.02em;
+  }
+  .lang-btn:hover { color: var(--white); background: rgba(255,255,255,0.08); }
+  .lang-btn.active {
+    background: var(--purple);
+    color: var(--white);
+    box-shadow: 0 0 12px rgba(94,23,235,0.4);
+  }
+
   .btn-nav {
     background: var(--purple);
     color: var(--white);
@@ -670,98 +706,8 @@
   }
   .social-link:hover { border-color: rgba(255,255,255,0.3); color: var(--white); }
 
-  /* قالب الـ PDF */
-  #pdf-template {
-    position: fixed;
-    top: -9999px;
-    left: -9999px;
-    width: 794px;
-    background: #ffffff;
-    color: #111111;
-    padding: 40px;
-    font-family: 'Inter', Arial, sans-serif;
-    visibility: hidden;
-    z-index: -1;
-  }
-  #pdf-template.pdf-visible {
-    visibility: visible;
-  }
-  .pdf-container {
-    max-width: 650px;
-    margin: 0 auto;
-  }
-  .pdf-header-center {
-    text-align: center;
-    border-bottom: 2px solid #5e17eb;
-    padding-bottom: 24px;
-    margin-bottom: 30px;
-  }
-  .pdf-logo-center {
-    width: 75px;
-    height: 75px;
-    object-fit: contain;
-    margin-bottom: 10px;
-  }
-  .pdf-agency-name {
-    font-size: 26px;
-    font-weight: 800;
-    color: #5e17eb;
-    letter-spacing: -0.02em;
-    text-transform: uppercase;
-  }
-  .pdf-sub {
-    font-size: 12px;
-    color: #666666;
-    margin-top: 4px;
-    font-weight: 500;
-  }
-  .pdf-title-doc {
-    font-size: 18px;
-    font-weight: 700;
-    color: #111111;
-    margin-bottom: 20px;
-    text-align: center;
-  }
-  .pdf-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 30px;
-    font-size: 14px;
-  }
-  .pdf-table th, .pdf-table td {
-    border: 1px solid #e0e0e0;
-    padding: 12px 16px;
-    text-align: left;
-  }
-  .pdf-table th {
-    background-color: #f8f9fa;
-    color: #5e17eb;
-    font-weight: 700;
-    width: 40%;
-  }
-  .pdf-table td {
-    color: #333333;
-    font-weight: 500;
-  }
-  .pdf-message {
-    font-size: 14px;
-    line-height: 1.6;
-    color: #444444;
-    text-align: center;
-    background: #fbf9ff;
-    border: 1px dashed #5e17eb;
-    border-radius: 8px;
-    padding: 16px;
-    margin-bottom: 30px;
-  }
-  .pdf-footer-thanks {
-    text-align: center;
-    font-size: 15px;
-    font-weight: 700;
-    color: #5e17eb;
-    border-top: 1px solid #eeeeee;
-    padding-top: 20px;
-  }
+
+
 
   /* ------------------------------------------- */
   /* CHATBOT STYLES (MIA)          */
@@ -995,6 +941,35 @@
     background: #450ec2;
     transform: scale(1.05);
   }
+  /* Quick question chips */
+  .mia-quick-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 10px 14px 4px 14px;
+    justify-content: flex-start;
+  }
+  .mia-chip {
+    background: rgba(94,23,235,0.08);
+    border: 1px solid rgba(94,23,235,0.3);
+    color: #5e17eb;
+    border-radius: 20px;
+    padding: 6px 14px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'Inter', sans-serif;
+    text-align: center;
+    white-space: nowrap;
+  }
+  .mia-chip:hover {
+    background: #5e17eb;
+    color: white;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(94,23,235,0.3);
+  }
+
   .mia-send-btn svg {
     width: 14px;
     height: 14px;
@@ -1046,37 +1021,44 @@
     <img src="https://i.ibb.co/LXBT6kQM/Untitled-1.png" alt="Logo Rihanio">
   </div>
   <ul class="nav-links">
-    <li><a href="#services">Services</a></li>
-    <li><a href="#apropos">À Propos</a></li>
-    <li><a href="#rdv">Prendre RDV</a></li>
-    <li><a href="#contact">Contact</a></li>
+    <li><a href="#services" data-i18n="nav_services">Services</a></li>
+    <li><a href="#apropos" data-i18n="nav_about">À Propos</a></li>
+    <li><a href="#rdv" data-i18n="nav_rdv">Prendre RDV</a></li>
+    <li><a href="#contact" data-i18n="nav_contact">Contact</a></li>
   </ul>
-  <a href="#rdv" class="btn-nav">Réserver un RDV</a>
+  <div class="nav-right">
+    <div class="lang-switcher">
+      <button class="lang-btn active" id="lang-fr" onclick="setLanguage('fr')">FR</button>
+      <button class="lang-btn" id="lang-en" onclick="setLanguage('en')">EN</button>
+      <button class="lang-btn" id="lang-ar" onclick="setLanguage('ar')">ع</button>
+    </div>
+    <a href="#rdv" class="btn-nav" id="nav-cta" data-i18n="nav_cta">Réserver un RDV</a>
+  </div>
 </nav>
 
 <section class="hero" id="apropos">
   <div class="hero-bg-glow"></div>
-  <div class="hero-badge"><span class="hero-badge-dot"></span>Agence Digitale & Management</div>
-  <h1>Propulsez votre <span class="accent-purple">visibilité</span> et vos <span class="accent-lime">rendements immobiliers</span> au niveau supérieur.</h1>
-  <p class="hero-sub">Nous combinons la puissance du digital et l'expertise immobilière pour maximiser vos performances et accélérer votre croissance.</p>
+  <div class="hero-badge"><span class="hero-badge-dot"></span><span data-i18n="badge">Agence Digitale & Management</span></div>
+  <h1><span data-i18n="hero_h1_1">Propulsez votre</span> <span class="accent-purple" data-i18n="hero_h1_2">visibilité</span> <span data-i18n="hero_h1_3">et vos</span> <span class="accent-lime" data-i18n="hero_h1_4">rendements immobiliers</span> <span data-i18n="hero_h1_5">au niveau supérieur.</span></h1>
+  <p class="hero-sub" data-i18n="hero_sub">Nous combinons la puissance du digital et l'expertise immobilière pour maximiser vos performances et accélérer votre croissance.</p>
   
   <div class="hero-ctas">
-    <a href="#rdv" class="btn-primary">Prendre RDV en ligne →</a>
-    <a href="#services" class="btn-secondary">Voir nos services</a>
+    <a href="#rdv" class="btn-primary" data-i18n="hero_cta1">Prendre RDV en ligne →</a>
+    <a href="#services" class="btn-secondary" data-i18n="hero_cta2">Voir nos services</a>
   </div>
 
   <div class="hero-metrics">
     <div class="metric">
       <div class="metric-num lime">+250%</div>
-      <div class="metric-label">Croissance organique</div>
+      <div class="metric-label" data-i18n="metric1">Croissance organique</div>
     </div>
     <div class="metric">
       <div class="metric-num yellow">98%</div>
-      <div class="metric-label">Taux d'occupation Airbnb</div>
+      <div class="metric-label" data-i18n="metric2">Taux d'occupation Airbnb</div>
     </div>
     <div class="metric">
       <div class="metric-num purple">3×</div>
-      <div class="metric-label">Retour sur investissement</div>
+      <div class="metric-label" data-i18n="metric3">Retour sur investissement</div>
     </div>
   </div>
 </section>
@@ -1084,8 +1066,8 @@
 <div class="section-divider"></div>
 
 <section class="services" id="services">
-  <span class="section-label">Nos expertises</span>
-  <h2 class="section-title">Des solutions <span>complètes</span> sur mesure</h2>
+  <span class="section-label" data-i18n="services_label">Nos expertises</span>
+  <h2 class="section-title"><span data-i18n="services_title">Des solutions <span>complètes</span> sur mesure</span></h2>
 
   <div class="bento">
     <div class="bento-card wide">
@@ -1094,8 +1076,8 @@
       <div class="card-icon icon-purple">
         <img src="https://i.ibb.co/Qh3PHsp/image.png" alt="Gestion des Réseaux Sociaux">
       </div>
-      <div class="card-title">Gestion des Réseaux Sociaux</div>
-      <div class="card-text">Création de contenu complet (visuels et textes), planification des publications, and animation quotidienne de vos communautés pour bâtir une présence forte et engagée.</div>
+      <div class="card-title" data-i18n="s1_title">Gestion des Réseaux Sociaux</div>
+      <div class="card-text" data-i18n="s1_text">Création de contenu complet (visuels et textes), planification des publications, and animation quotidienne de vos communautés pour bâtir une présence forte et engagée.</div>
     </div>
 
     <div class="bento-card narrow">
@@ -1104,8 +1086,8 @@
       <div class="card-icon icon-lime">
         <img src="https://i.ibb.co/RkWTf6dw/image.png" alt="Création de Site Internet">
       </div>
-      <div class="card-title">Création de Site Internet</div>
-      <div class="card-text">Conception et développement de sites vitrines et de boutiques e-commerce modernes, rapides et adaptés aux mobiles.</div>
+      <div class="card-title" data-i18n="s2_title">Création de Site Internet</div>
+      <div class="card-text" data-i18n="s2_text">Conception et développement de sites vitrines et de boutiques e-commerce modernes, rapides et adaptés aux mobiles.</div>
     </div>
 
     <div class="bento-card full">
@@ -1119,8 +1101,8 @@
           </div>
         </div>
         <div style="flex:1;min-width:260px;">
-          <div class="card-title">Gestion Airbnb & Locations Saisonnières</div>
-          <div class="card-text">Prise en charge intégrale de vos biens en location de courte durée. Nous optimisons vos annonces pour maximiser le taux d'occupation, gérons la communication avec les voyageurs 24/7, coordonnons les entrées/sorties (check-in/out) et mettons en place des stratégies pour offrir une expérience client irréprochable.</div>
+          <div class="card-title" data-i18n="s3_title">Gestion Airbnb & Locations Saisonnières</div>
+          <div class="card-text" data-i18n="s3_text">Prise en charge intégrale de vos biens en location de courte durée. Nous optimisons vos annonces pour maximiser le taux d'occupation, gérons la communication avec les voyageurs 24/7, coordonnons les entrées/sorties (check-in/out) et mettons en place des stratégies pour offrir une expérience client irréprochable.</div>
         </div>
         <div style="flex:0 0 auto;display:flex;flex-direction:column;gap:10px;margin-top:4px;">
           <div style="background:rgba(234,255,7,0.08);border:1px solid rgba(234,255,7,0.15);border-radius:10px;padding:12px 18px;text-align:center;">
@@ -1141,17 +1123,44 @@
       <div class="card-icon icon-pink">
         <img src="https://i.ibb.co/b55bV4Xc/image.png" alt="Étude de Rentabilité & Modélisation Financière">
       </div>
-      <div class="card-title">Étude de Rentabilité & Modélisation Financière</div>
-      <div class="card-text">Nous aidons les entrepreneurs et les investisseurs immobiliers à valider la viabilité financière de leurs projets avant de s'engager.</div>
+      <div class="card-title" data-i18n="s4_title">Étude de Rentabilité & Modélisation Financière</div>
+      <div class="card-text" data-i18n="s4_text">Nous aidons les entrepreneurs et les investisseurs immobiliers à valider la viabilité financière de leurs projets avant de s'engager.</div>
+    </div>
+
+    <div class="bento-card full">
+      <div class="card-glow" style="background:linear-gradient(135deg,#e040fb,#7c4dff);bottom:-40px;right:-40px;width:160px;height:160px;border-radius:50%;opacity:0.13;position:absolute;pointer-events:none;"></div>
+      <div style="display:flex;gap:40px;align-items:flex-start;flex-wrap:wrap;">
+        <div style="flex:0 0 auto;">
+          <div class="card-num">05</div>
+          <div class="card-icon" style="background:rgba(224,64,251,0.12);">
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#e040fb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+          </div>
+        </div>
+        <div style="flex:1;min-width:260px;">
+          <div class="card-pill" style="background:rgba(224,64,251,0.1);color:#e040fb;border-color:rgba(224,64,251,0.25);" data-i18n="s5_pill">Rhino Studio</div>
+          <div class="card-title" data-i18n="s5_title">Services Audiovisuels Événementiels</div>
+          <div class="card-text" data-i18n="s5_text">Rhino Studio accompagne vos événements avec une expertise audiovisuelle sur-mesure. Nous capturons l'essence de vos moments forts à travers une approche cinématographique et professionnelle.</div>
+        </div>
+        <div style="flex:0 0 auto;display:flex;flex-direction:column;gap:10px;margin-top:4px;">
+          <div style="background:rgba(224,64,251,0.08);border:1px solid rgba(224,64,251,0.2);border-radius:10px;padding:12px 18px;text-align:center;">
+            <div style="font-size:22px;font-weight:800;color:#e040fb;">🎬</div>
+            <div style="font-size:11px;color:var(--gray-text);" data-i18n="s5_stat1">Cinématographique</div>
+          </div>
+          <div style="background:rgba(224,64,251,0.08);border:1px solid rgba(224,64,251,0.2);border-radius:10px;padding:12px 18px;text-align:center;">
+            <div style="font-size:22px;font-weight:800;color:#e040fb;">🎤</div>
+            <div style="font-size:11px;color:var(--gray-text);" data-i18n="s5_stat2">Sur-mesure</div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div class="bento-card half" style="display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;background:linear-gradient(135deg,rgba(94,23,235,0.25),rgba(94,23,235,0.05));border-color:rgba(94,23,235,0.3);">
       <div class="cta-icon-box">
         <img src="https://i.ibb.co/Kj0pV6Lx/image.png" alt="Prêt à scaler">
       </div>
-      <div style="font-size:18px;font-weight:700;margin-bottom:10px;letter-spacing:-0.02em;">Prêt à scaler ?</div>
-      <div style="font-size:13px;color:var(--gray-text);margin-bottom:24px;">Discutons de vos objectifs and construisons ensemble votre stratégie de croissance.</div>
-      <a href="#rdv" class="btn-primary" style="font-size:13px;padding:11px 22px;">Prendre rendez-vous →</a>
+      <div style="font-size:18px;font-weight:700;margin-bottom:10px;letter-spacing:-0.02em;" data-i18n="cta_card_title">Prêt à scaler ?</div>
+      <div style="font-size:13px;color:var(--gray-text);margin-bottom:24px;" data-i18n="cta_card_text">Discutons de vos objectifs and construisons ensemble votre stratégie de croissance.</div>
+      <a href="#rdv" class="btn-primary" style="font-size:13px;padding:11px 22px;" data-i18n="cta_card_btn">Prendre rendez-vous →</a>
     </div>
   </div>
 </section>
@@ -1160,21 +1169,21 @@
 
 <section class="booking-section" id="rdv">
   <div class="booking-box" style="text-align: center;">
-    <span class="section-label" style="display:block;margin-bottom:14px;color:var(--lime);">Planification</span>
-    <h2>Réserver un <span style="color:var(--lime)">Rendez-vous</span></h2>
-    <p>Choisissez un créneau disponible (Lundi, Mercredi ou Vendredi) et téléchargez votre confirmation officielle en PDF.</p>
+    <span class="section-label" style="display:block;margin-bottom:14px;color:var(--lime);" data-i18n="rdv_label">Planification</span>
+    <h2><span data-i18n="rdv_title">Réserver un</span> <span style="color:var(--lime)" data-i18n="rdv_title2">Rendez-vous</span></h2>
+    <p data-i18n="rdv_sub">Choisissez un créneau disponible (Lundi, Mercredi ou Vendredi) et recevez votre confirmation par e-mail.</p>
     
-    <form class="booking-form" id="main-booking-form" onsubmit="generateBookingPDF(event)">
+    <form class="booking-form" id="main-booking-form" onsubmit="submitBooking(event)">
       <div class="full-width">
-        <label for="bk-name">Nom complet</label>
-        <input type="text" id="bk-name" required placeholder="Votre nom complet">
+        <label for="bk-name" data-i18n="bk_name">Nom complet</label>
+        <input type="text" id="bk-name" required placeholder="Votre nom complet" data-i18n-ph="bk_name_ph">
       </div>
       <div>
-        <label for="bk-email">Adresse e-mail</label>
+        <label for="bk-email" data-i18n="bk_email">Adresse e-mail</label>
         <input type="email" id="bk-email" required placeholder="exemple@mail.com">
       </div>
       <div>
-        <label for="bk-phone">Numéro de téléphone</label>
+        <label for="bk-phone" data-i18n="bk_phone">Numéro de téléphone</label>
         <input type="tel" id="bk-phone" required placeholder="+212...">
       </div>
       <div class="date-input-wrapper">
@@ -1199,7 +1208,7 @@
           <option value="">Sélectionnez d'abord une date</option>
         </select>
       </div>
-      <button type="submit" class="btn-booking">Confirmer le rendez-vous & Télécharger le PDF</button>
+      <button type="submit" class="btn-booking" data-i18n="bk_btn">Confirmer le rendez-vous</button>
     </form>
   </div>
 </section>
@@ -1209,25 +1218,25 @@
 <section class="contact" id="contact">
   <div class="contact-box">
     <div class="contact-glow"></div>
-    <span class="section-label" style="display:block;margin-bottom:14px;">Contact</span>
-    <h2>Parlons de votre <span style="color:var(--purple)">projet</span></h2>
-    <p>Laissez-nous votre nom, e-mail, <b>numéro de téléphone</b> et les détails de votre projet. Nous vous répondrons sous 24h.</p>
+    <span class="section-label" style="display:block;margin-bottom:14px;" data-i18n="contact_label">Contact</span>
+    <h2><span data-i18n="contact_title">Parlons de votre</span> <span style="color:var(--purple)" data-i18n="contact_title2">projet</span></h2>
+    <p data-i18n="contact_sub">Laissez-nous votre nom, e-mail, <b>numéro de téléphone</b> et les détails de votre projet. Nous vous répondrons sous 24h.</p>
 
     <form class="contact-form" action="https://formsubmit.co/erraihanibrahim186@gmail.com" method="POST">
       <input type="hidden" name="_captcha" value="false">
       
-      <input type="text" name="Nom Complet" placeholder="Votre nom complet" required>
-      <input type="email" name="Email" placeholder="Votre adresse e-mail" required>
-      <input type="tel" name="Téléphone" placeholder="Votre numéro de téléphone (Ex: +212...)" required>
-      <textarea name="Message" placeholder="Décrivez votre projet..." required></textarea>
+      <input type="text" name="Nom Complet" placeholder="Votre nom complet" required data-i18n-ph="contact_name_ph">
+      <input type="email" name="Email" placeholder="Votre adresse e-mail" required data-i18n-ph="contact_email_ph">
+      <input type="tel" name="Téléphone" placeholder="Votre numéro de téléphone (Ex: +212...)" required data-i18n-ph="contact_phone_ph">
+      <textarea name="Message" placeholder="Décrivez votre projet..." required data-i18n-ph="contact_msg_ph"></textarea>
       
-      <button type="submit" class="btn-submit">Envoyer le message</button>
+      <button type="submit" class="btn-submit" data-i18n="contact_btn">Envoyer le message</button>
     </form>
 
     <div style="position:relative;margin:8px 0 24px;">
       <div style="display:flex;align-items:center;gap:14px;">
         <div style="flex:1;height:1px;background:var(--gray-border);"></div>
-        <span style="font-size:12px;color:var(--gray-text);">ou</span>
+        <span style="font-size:12px;color:var(--gray-text);" data-i18n="or_text">ou</span>
         <div style="flex:1;height:1px;background:var(--gray-border);"></div>
       </div>
     </div>
@@ -1248,113 +1257,7 @@
   </div>
 </section>
 
-<div id="pdf-template">
-  <div class="pdf-container">
 
-    <!-- HEADER -->
-    <div class="pdf-header-center">
-      <img src="https://i.ibb.co/LXBT6kQM/Untitled-1.png" class="pdf-logo-center" alt="Logo Rihanio">
-      <div class="pdf-agency-name">RIHANIO</div>
-      <div class="pdf-sub">Agence Digitale &amp; Management</div>
-    </div>
-
-    <!-- TITLE bilangue -->
-    <div style="text-align:center; margin-bottom:22px;">
-      <div style="font-size:17px;font-weight:800;color:#5e17eb;letter-spacing:-0.01em;">
-        CONFIRMATION OFFICIELLE DE RÉSERVATION
-      </div>
-      <div style="font-size:14px;font-weight:700;color:#333;margin-top:4px;font-family:'Segoe UI',Arial,sans-serif;direction:rtl;">
-        تأكيد رسمي للموعد
-      </div>
-      <div style="width:60px;height:3px;background:linear-gradient(90deg,#5e17eb,#c1ff72);margin:10px auto 0;border-radius:4px;"></div>
-    </div>
-
-    <!-- MAIN LAYOUT: table + QR -->
-    <div style="display:flex;gap:24px;align-items:flex-start;margin-bottom:24px;">
-
-      <!-- TABLE -->
-      <table class="pdf-table" style="flex:1;">
-        <tr>
-          <th>
-            <div>Nom &amp; Prénom</div>
-            <div style="font-weight:500;color:#888;font-size:11px;direction:rtl;">الاسم الكامل</div>
-          </th>
-          <td><span id="pdf-out-name" style="font-weight:700;"></span></td>
-        </tr>
-        <tr>
-          <th>
-            <div>Adresse E-mail</div>
-            <div style="font-weight:500;color:#888;font-size:11px;direction:rtl;">البريد الإلكتروني</div>
-          </th>
-          <td><span id="pdf-out-email"></span></td>
-        </tr>
-        <tr>
-          <th>
-            <div>Numéro de Téléphone</div>
-            <div style="font-weight:500;color:#888;font-size:11px;direction:rtl;">رقم الهاتف</div>
-          </th>
-          <td><span id="pdf-out-phone"></span></td>
-        </tr>
-        <tr>
-          <th>
-            <div>Date du Rendez-vous</div>
-            <div style="font-weight:500;color:#888;font-size:11px;direction:rtl;">تاريخ الموعد</div>
-          </th>
-          <td><span id="pdf-out-date" style="font-weight:700;color:#5e17eb;"></span></td>
-        </tr>
-        <tr>
-          <th>
-            <div>Heure du Rendez-vous</div>
-            <div style="font-weight:500;color:#888;font-size:11px;direction:rtl;">ساعة الموعد</div>
-          </th>
-          <td><span id="pdf-out-time" style="font-weight:700;color:#5e17eb;"></span></td>
-        </tr>
-        <tr>
-          <th>
-            <div>N° Confirmation</div>
-            <div style="font-weight:500;color:#888;font-size:11px;direction:rtl;">رقم التأكيد</div>
-          </th>
-          <td><span id="pdf-out-id" style="font-family:monospace;font-size:12px;background:#f3eeff;padding:2px 6px;border-radius:4px;color:#5e17eb;font-weight:700;"></span></td>
-        </tr>
-      </table>
-
-      <!-- QR CODE -->
-      <div style="text-align:center;flex-shrink:0;">
-        <div style="border:2px solid #5e17eb;border-radius:12px;padding:10px;display:inline-block;background:#fff;">
-          <div id="pdf-qr-code"></div>
-        </div>
-        <div style="font-size:10px;color:#888;margin-top:6px;">Scannez pour vérifier</div>
-        <div style="font-size:9px;color:#aaa;direction:rtl;">امسح للتحقق</div>
-      </div>
-    </div>
-
-    <!-- MESSAGE bilangue -->
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;">
-      <div style="background:#f9f6ff;border:1px dashed #5e17eb;border-radius:8px;padding:14px;font-size:12.5px;line-height:1.6;color:#333;">
-        <strong style="color:#5e17eb;">📋 Important :</strong><br>
-        Votre créneau a été réservé avec succès. Merci de <strong>respecter l'heure</strong> de votre rendez-vous. En cas d'empêchement, veuillez nous contacter au moins <strong>24h à l'avance</strong>.
-      </div>
-      <div style="background:#f9f6ff;border:1px dashed #5e17eb;border-radius:8px;padding:14px;font-size:12.5px;line-height:1.6;color:#333;direction:rtl;text-align:right;font-family:'Segoe UI',Arial,sans-serif;">
-        <strong style="color:#5e17eb;">📋 تنبيه مهم :</strong><br>
-        تم تأكيد موعدك بنجاح. يُرجى <strong>احترام الوقت المحدد</strong> لموعدك. في حال عدم التمكن من الحضور، يُرجى إخطارنا قبل <strong>24 ساعة</strong> على الأقل.
-      </div>
-    </div>
-
-    <!-- FOOTER bilangue -->
-    <div style="border-top:2px solid #5e17eb;padding-top:16px;display:flex;justify-content:space-between;align-items:center;">
-      <div style="font-size:13px;font-weight:700;color:#5e17eb;">
-        Merci pour votre confiance ! 🙏
-      </div>
-      <div style="font-size:13px;font-weight:700;color:#5e17eb;direction:rtl;font-family:'Segoe UI',Arial,sans-serif;">
-        شكراً على ثقتكم ! 🙏
-      </div>
-    </div>
-    <div style="text-align:center;margin-top:10px;font-size:10px;color:#bbb;">
-      rihanio.com · Instagram: @rihanio_ · WhatsApp disponible
-    </div>
-
-  </div>
-</div>
 
 <footer>
   <div class="footer-left">
@@ -1593,7 +1496,7 @@
     }
   }
 
-  function generateBookingPDF(event) {
+  function submitBooking(event) {
     event.preventDefault();
 
     const name  = document.getElementById('bk-name').value.trim();
@@ -1615,66 +1518,15 @@
     /* ── Générer un ID unique de confirmation ── */
     const confirmId = 'RDV-' + Date.now().toString(36).toUpperCase();
 
-    /* ── Remplir le template PDF ── */
-    document.getElementById('pdf-out-name').textContent  = name;
-    document.getElementById('pdf-out-email').textContent = email;
-    document.getElementById('pdf-out-phone').textContent = phone;
-    document.getElementById('pdf-out-date').textContent  = date;
-    document.getElementById('pdf-out-time').textContent  = time;
-    document.getElementById('pdf-out-id').textContent    = confirmId;
+    /* ── Réserver le créneau et envoyer l'email ── */
+    bookSlot(selectedFullDateStr, time);
+    sendConfirmationEmail(name, email, phone, date, time, confirmId);
 
-    /* ── Générer le QR Code ── */
-    const qrContainer = document.getElementById('pdf-qr-code');
-    qrContainer.innerHTML = '';
-    const qrData = `Rihanio RDV | ID: ${confirmId} | Nom: ${name} | Date: ${date} | Heure: ${time} | Email: ${email} | Tel: ${phone}`;
-    new QRCode(qrContainer, {
-      text: qrData,
-      width: 120,
-      height: 120,
-      colorDark: '#5e17eb',
-      colorLight: '#ffffff',
-      correctLevel: QRCode.CorrectLevel.M
-    });
-
-    const element = document.getElementById('pdf-template');
-    element.classList.add('pdf-visible');
-
-    // Attendre que le QR Code et le DOM soient prêts
-    setTimeout(() => {
-      // Convertir le canvas QR en image pour html2canvas
-      const canvas = qrContainer.querySelector('canvas');
-      if (canvas) {
-        const imgEl = document.createElement('img');
-        imgEl.src = canvas.toDataURL('image/png');
-        imgEl.width = 120;
-        imgEl.height = 120;
-        canvas.replaceWith(imgEl);
-      }
-
-      const opt = {
-        margin:      [8, 8, 8, 8],
-        filename:    'Confirmation_RDV_Rihanio_' + name.replace(/\s+/g, '_') + '.pdf',
-        image:       { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2, useCORS: true, allowTaint: true, logging: false, backgroundColor: '#ffffff' },
-        jsPDF:       { unit: 'mm', format: 'a4', orientation: 'portrait' }
-      };
-
-      html2pdf().set(opt).from(element).save().then(() => {
-        element.classList.remove('pdf-visible');
-        bookSlot(selectedFullDateStr, time);
-        // ── Envoyer l'email de confirmation ──
-        sendConfirmationEmail(name, email, phone, date, time, confirmId);
-        alert("✅ Félicitations ! Votre rendez-vous est confirmé.\nVotre confirmation PDF a été téléchargée.\n📧 Un email de confirmation vous a été envoyé.");
-        document.getElementById('main-booking-form').reset();
-        selectedFullDateStr = "";
-        timeSelect.disabled = true;
-        timeSelect.innerHTML = '<option value="">Sélectionnez d\'abord une date</option>';
-      }).catch(err => {
-        console.error(err);
-        element.classList.remove('pdf-visible');
-        alert("Erreur lors de la génération du PDF. Veuillez réessayer.");
-      });
-    }, 600);
+    alert("✅ Félicitations ! Votre rendez-vous est confirmé.\n📧 Un email de confirmation vous a été envoyé.");
+    document.getElementById('main-booking-form').reset();
+    selectedFullDateStr = "";
+    timeSelect.disabled = true;
+    timeSelect.innerHTML = '<option value="">Sélectionnez d\'abord une date</option>';
   }
 
   /* ------------------------------------------- */
@@ -1766,6 +1618,66 @@ Agence Digitale & Management`;
     en: "Perfect! English language activated. How can I help you today with Rihanio's services?"
   };
 
+  // Quick questions bank per language
+  const quickQuestions = {
+    ar: [
+      { label: "🏠 ما هي خدمات Airbnb؟", text: "ما هي خدمات إدارة Airbnb التي تقدمونها؟" },
+      { label: "📱 إدارة السوشيال ميديا", text: "كيف تديرون حسابات وسائل التواصل الاجتماعي؟" },
+      { label: "🌐 تصميم مواقع", text: "ما هي خدمات تصميم وتطوير المواقع الإلكترونية لديكم؟" },
+      { label: "📊 دراسة الجدوى", text: "ما هي خدمة دراسة الجدوى والنمذجة المالية؟" },
+      { label: "📅 حجز موعد", text: "كيف يمكنني حجز موعد مع فريق Rihanio؟" },
+      { label: "💰 الأسعار", text: "ما هي أسعار خدماتكم؟" }
+    ],
+    mor: [
+      { label: "🏠 خدمات Airbnb", text: "شنو هي الخدمات ديال تسيير Airbnb لي عندكم؟" },
+      { label: "📱 سوشيال ميديا", text: "كيفاش كتديرو الحسابات ديال السوشيال ميديا؟" },
+      { label: "🌐 تصميم سيت", text: "شنو خدمات تصميم وبرمجة المواقع لي عندكم؟" },
+      { label: "📊 دراسة الربح", text: "شنو هي خدمة دراسة الربحية ديال المشاريع؟" },
+      { label: "📅 شد رنديفو", text: "كيفاش نشد رنديفو مع فريق Rihanio؟" },
+      { label: "💰 الأثمنة", text: "شنو هي أثمنة الخدمات ديالكم؟" }
+    ],
+    fr: [
+      { label: "🏠 Gestion Airbnb", text: "Quels sont vos services de gestion Airbnb ?" },
+      { label: "📱 Réseaux sociaux", text: "Comment gérez-vous les réseaux sociaux ?" },
+      { label: "🌐 Création de site", text: "Quels sont vos services de création de site web ?" },
+      { label: "📊 Étude de rentabilité", text: "En quoi consiste l'étude de rentabilité ?" },
+      { label: "📅 Prendre RDV", text: "Comment prendre rendez-vous avec l'équipe Rihanio ?" },
+      { label: "💰 Tarifs", text: "Quels sont vos tarifs ?" }
+    ],
+    en: [
+      { label: "🏠 Airbnb Management", text: "What Airbnb management services do you offer?" },
+      { label: "📱 Social Media", text: "How do you manage social media accounts?" },
+      { label: "🌐 Website Creation", text: "What website design and development services do you offer?" },
+      { label: "📊 Profitability Study", text: "What is the profitability study service?" },
+      { label: "📅 Book a Meeting", text: "How can I book a meeting with Rihanio's team?" },
+      { label: "💰 Pricing", text: "What are your service prices?" }
+    ]
+  };
+
+  function sendQuickQuestion(text) {
+    miaInput.value = text;
+    sendMiaMessage();
+  }
+
+  function showQuickChips(lang) {
+    const config = langInterfaces[lang];
+    const questions = quickQuestions[lang] || [];
+    const isRtl = config.dir === 'rtl';
+    const chipsHTML = `
+      <div class="mia-quick-chips" id="mia-quick-chips" style="${isRtl ? 'direction:rtl; justify-content:flex-end;' : ''}">
+        ${questions.map(q => `<button class="mia-chip" onclick="sendQuickQuestion('${q.text.replace(/'/g, "\\'")}')">${q.label}</button>`).join('')}
+      </div>
+    `;
+    miaChatBody.insertAdjacentHTML('beforeend', chipsHTML);
+    miaChatBody.scrollTop = miaChatBody.scrollHeight;
+  }
+
+  // Hide chips when user sends a message
+  function hideQuickChips() {
+    const chips = document.getElementById('mia-quick-chips');
+    if (chips) chips.remove();
+  }
+
   function toggleMiaChat() {
     if (miaWindow.style.display === 'flex') {
       miaWindow.style.display = 'none';
@@ -1821,6 +1733,7 @@ Agence Digitale & Management`;
     `;
     miaChatBody.insertAdjacentHTML('beforeend', welcomeHTML);
     miaChatBody.scrollTop = miaChatBody.scrollHeight;
+    showQuickChips(lang);
   }
 
   // =============================================
@@ -1832,6 +1745,8 @@ Agence Digitale & Management`;
   async function sendMiaMessage() {
     const text = miaInput.value.trim();
     if (!text) return;
+
+    hideQuickChips();
 
     const timeStr = new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
     const config = langInterfaces[selectedLanguage];
@@ -1926,6 +1841,7 @@ Agence Digitale & Management`;
       `;
       miaChatBody.insertAdjacentHTML('beforeend', botMsgHTML);
       miaChatBody.scrollTop = miaChatBody.scrollHeight;
+      showQuickChips(selectedLanguage);
 
     } catch (error) {
       // خطأ في الشبكة أو الاتصال → نستخدم الردود الذكية بدل رسالة الخطأ
@@ -1947,6 +1863,7 @@ Agence Digitale & Management`;
       `;
       miaChatBody.insertAdjacentHTML('beforeend', fallbackMsgHTML);
       miaChatBody.scrollTop = miaChatBody.scrollHeight;
+      showQuickChips(selectedLanguage);
       console.warn("Gemini API unavailable, using smart fallback.", error);
     }
   }
@@ -1963,7 +1880,7 @@ Agence Digitale & Management`;
       } else if (lowText.includes('موقع') || lowText.includes('ويب') || lowText.includes('برمجة')) {
         botResponse = "نحن نتميز بتصميم مواقع تعريفية ومتاجر إلكترونية حديثة، فائقة السرعة ومتوافقة مع معايير الـ SEO لجذب أكبر عدد من العملاء.";
       } else if (lowText.includes('موعد') || lowText.includes('حجز')) {
-        botResponse = "يمكنك اختيار الوقت المناسب لك مباشرة من خلال قسم 'طلب موعد' على موقعنا، وستتمكن من تحميل تأكيد الحجز بصيغة PDF فوراً.";
+        botResponse = "يمكنك اختيار الوقت المناسب لك مباشرة من خلال قسم 'طلب موعد' على موقعنا وسيصلك تأكيد الحجز عبر البريد الإلكتروني.";
       }
     }
     else if (selectedLanguage === "mor") {
@@ -1973,7 +1890,7 @@ Agence Digitale & Management`;
       } else if (lowText.includes('موقع') || lowText.includes('سيت') || lowText.includes('ويب')) {
         botResponse = "كنقادو سيتات ويب ومتاجر إلكترونية ناضية، خفيفة وبديزاين عصري لي يجيب ليك كليان جداد تال عندك.";
       } else if (lowText.includes('موعد') || lowText.includes('رنديفو') || lowText.includes('بغات تشد')) {
-        botResponse = "تقدر تعزل النهار والوقت لي مسلكك فالفورمولير ديال الحجز الفوق، ومن بعد تيليشارجي الورقة ديالك PDF.";
+        botResponse = "تقدر تعزل النهار والوقت لي مسلكك فالفورمولير ديال الحجز الفوق، ومن بعد كيوصلك تأكيد على الإيميل ديالك.";
       }
     }
     else if (selectedLanguage === "en") {
@@ -1983,7 +1900,7 @@ Agence Digitale & Management`;
       } else if (lowText.includes('website') || lowText.includes('web') || lowText.includes('development')) {
         botResponse = "We design modern, fast, and SEO-optimized landing pages and e-commerce stores to scale up your sales.";
       } else if (lowText.includes('book') || lowText.includes('appointment') || lowText.includes('meeting')) {
-        botResponse = "You can instantly select your preferred slot in our booking section and download your official confirmation as a PDF.";
+        botResponse = "You can instantly select your preferred slot in our booking section and you'll receive a confirmation email.";
       }
     }
     else {
@@ -1993,7 +1910,7 @@ Agence Digitale & Management`;
       } else if (lowText.includes('site') || lowText.includes('web') || lowText.includes('digital')) {
         botResponse = "Nous concevons des sites vitrines et e-commerce modernes, ultra-rapides et optimisés SEO pour maximiser vos conversions.";
       } else if (lowText.includes('rdv') || lowText.includes('rendez-vous') || lowText.includes('reserver')) {
-        botResponse = "Vous pouvez choisir votre créneau préféré directement dans la section 'Prendre RDV' de notre site web. C'est simple et vous recevrez un PDF instantané.";
+        botResponse = "Vous pouvez choisir votre créneau préféré directement dans la section 'Prendre RDV' de notre site web. Vous recevrez une confirmation par e-mail.";
       }
     }
 
@@ -2002,6 +1919,214 @@ Agence Digitale & Management`;
 
   // --- كود قديم محذوف --- (كان هنا if/else وsetTimeout)
 
+
+  /* ================================================
+     LANGUAGE SWITCHER (i18n)
+  ================================================ */
+  const translations = {
+    fr: {
+      nav_services: "Services",
+      nav_about: "À Propos",
+      nav_rdv: "Prendre RDV",
+      nav_contact: "Contact",
+      nav_cta: "Réserver un RDV",
+      badge: "Agence Digitale & Management",
+      hero_h1_1: "Propulsez votre",
+      hero_h1_2: "visibilité",
+      hero_h1_3: "et vos",
+      hero_h1_4: "rendements immobiliers",
+      hero_h1_5: "au niveau supérieur.",
+      hero_sub: "Nous combinons la puissance du digital et l'expertise immobilière pour maximiser vos performances et accélérer votre croissance.",
+      hero_cta1: "Prendre RDV en ligne →",
+      hero_cta2: "Voir nos services",
+      metric1: "Croissance organique",
+      metric2: "Taux d'occupation Airbnb",
+      metric3: "Retour sur investissement",
+      services_label: "Nos expertises",
+      services_title: "Des solutions <span>complètes</span> sur mesure",
+      s1_title: "Gestion des Réseaux Sociaux",
+      s1_text: "Création de contenu complet (visuels et textes), planification des publications, et animation quotidienne de vos communautés pour bâtir une présence forte et engagée.",
+      s2_title: "Création de Site Internet",
+      s2_text: "Conception et développement de sites vitrines et de boutiques e-commerce modernes, rapides et adaptés aux mobiles.",
+      s3_title: "Gestion Airbnb & Locations Saisonnières",
+      s3_text: "Prise en charge intégrale de vos biens en location de courte durée. Nous optimisons vos annonces pour maximiser le taux d'occupation, gérons la communication avec les voyageurs 24/7, coordonnons les entrées/sorties et mettons en place des stratégies pour offrir une expérience client irréprochable.",
+      s4_title: "Étude de Rentabilité & Modélisation Financière",
+      s4_text: "Nous aidons les entrepreneurs et les investisseurs immobiliers à valider la viabilité financière de leurs projets avant de s'engager.",
+      cta_card_title: "Prêt à scaler ?",
+      cta_card_text: "Discutons de vos objectifs et construisons ensemble votre stratégie de croissance.",
+      cta_card_btn: "Prendre rendez-vous →",
+      rdv_label: "Planification",
+      rdv_title: "Réserver un",
+      rdv_title2: "Rendez-vous",
+      rdv_sub: "Choisissez un créneau disponible (Lundi, Mercredi ou Vendredi) et recevez votre confirmation par e-mail.",
+      bk_name: "Nom complet",
+      bk_name_ph: "Votre nom complet",
+      bk_email: "Adresse e-mail",
+      bk_phone: "Numéro de téléphone",
+      bk_btn: "Confirmer le rendez-vous",
+      contact_label: "Contact",
+      contact_title: "Parlons de votre",
+      contact_title2: "projet",
+      contact_sub: "Laissez-nous votre nom, e-mail, <b>numéro de téléphone</b> et les détails de votre projet. Nous vous répondrons sous 24h.",
+      contact_name_ph: "Votre nom complet",
+      contact_email_ph: "Votre adresse e-mail",
+      contact_phone_ph: "Votre numéro de téléphone (Ex: +212...)",
+      contact_msg_ph: "Décrivez votre projet...",
+      contact_btn: "Envoyer le message",
+      or_text: "ou",
+      dir: "ltr"
+    },
+    en: {
+      nav_services: "Services",
+      nav_about: "About",
+      nav_rdv: "Book a Meeting",
+      nav_contact: "Contact",
+      nav_cta: "Book a Meeting",
+      badge: "Digital Agency & Management",
+      hero_h1_1: "Elevate your",
+      hero_h1_2: "visibility",
+      hero_h1_3: "and your",
+      hero_h1_4: "real estate returns",
+      hero_h1_5: "to the next level.",
+      hero_sub: "We combine the power of digital marketing with real estate expertise to maximize your performance and accelerate your growth.",
+      hero_cta1: "Book a Meeting →",
+      hero_cta2: "Our Services",
+      metric1: "Organic Growth",
+      metric2: "Airbnb Occupancy Rate",
+      metric3: "Return on Investment",
+      services_label: "Our expertise",
+      services_title: "Complete <span>tailored</span> solutions",
+      s1_title: "Social Media Management",
+      s1_text: "Full content creation (visuals and copy), publication scheduling, and daily community engagement to build a strong, active presence.",
+      s2_title: "Website Creation",
+      s2_text: "Design and development of modern, fast, mobile-friendly showcase sites and e-commerce stores.",
+      s3_title: "Airbnb & Short-Term Rental Management",
+      s3_text: "Full management of your short-term rental properties. We optimize your listings to maximize occupancy, handle guest communication 24/7, coordinate check-ins/outs, and implement strategies for an outstanding guest experience.",
+      s4_title: "Profitability Study & Financial Modeling",
+      s4_text: "We help entrepreneurs and real estate investors validate the financial viability of their projects before committing.",
+      cta_card_title: "Ready to scale?",
+      cta_card_text: "Let's discuss your goals and build your growth strategy together.",
+      cta_card_btn: "Book a meeting →",
+      rdv_label: "Scheduling",
+      rdv_title: "Book an",
+      rdv_title2: "Appointment",
+      rdv_sub: "Choose an available slot (Monday, Wednesday or Friday) and receive your confirmation by email.",
+      bk_name: "Full name",
+      bk_name_ph: "Your full name",
+      bk_email: "Email address",
+      bk_phone: "Phone number",
+      bk_btn: "Confirm appointment",
+      contact_label: "Contact",
+      contact_title: "Let's talk about your",
+      contact_title2: "project",
+      contact_sub: "Leave us your name, email, <b>phone number</b> and project details. We'll reply within 24 hours.",
+      contact_name_ph: "Your full name",
+      contact_email_ph: "Your email address",
+      contact_phone_ph: "Your phone number (e.g. +212...)",
+      contact_msg_ph: "Describe your project...",
+      contact_btn: "Send message",
+      or_text: "or",
+      dir: "ltr"
+    },
+    ar: {
+      nav_services: "الخدمات",
+      nav_about: "من نحن",
+      nav_rdv: "احجز موعداً",
+      nav_contact: "تواصل معنا",
+      nav_cta: "احجز موعداً",
+      badge: "وكالة رقمية وإدارة عقارية",
+      hero_h1_1: "ارتقِ بـ",
+      hero_h1_2: "حضورك الرقمي",
+      hero_h1_3: "وزد",
+      hero_h1_4: "عوائدك العقارية",
+      hero_h1_5: "إلى مستوى أعلى.",
+      hero_sub: "نجمع بين قوة التسويق الرقمي والخبرة العقارية لتعظيم أدائك وتسريع نموك.",
+      hero_cta1: "احجز موعداً →",
+      hero_cta2: "خدماتنا",
+      metric1: "نمو عضوي",
+      metric2: "معدل إشغال Airbnb",
+      metric3: "العائد على الاستثمار",
+      services_label: "خبراتنا",
+      services_title: "حلول <span>متكاملة</span> مخصصة",
+      s1_title: "إدارة وسائل التواصل الاجتماعي",
+      s1_text: "إنشاء محتوى متكامل (صور ونصوص)، جدولة المنشورات، وتنشيط مجتمعاتك يومياً لبناء حضور قوي وفعّال.",
+      s2_title: "تصميم وتطوير المواقع الإلكترونية",
+      s2_text: "تصميم وبرمجة مواقع عرض ومتاجر إلكترونية حديثة وسريعة ومتجاوبة مع جميع الأجهزة.",
+      s3_title: "إدارة Airbnb والإيجارات القصيرة",
+      s3_text: "إدارة شاملة لعقاراتك المخصصة للإيجار القصير. نُحسّن إعلاناتك لرفع معدل الإشغال، ونتولى التواصل مع المسافرين على مدار 24/7، وننسّق عمليات تسجيل الدخول والخروج لتقديم تجربة لا تُنسى.",
+      s4_title: "دراسة الجدوى والنمذجة المالية",
+      s4_text: "نساعد رواد الأعمال والمستثمرين العقاريين على التحقق من الجدوى المالية لمشاريعهم قبل الالتزام بها.",
+      cta_card_title: "هل أنت مستعد للانطلاق؟",
+      cta_card_text: "دعنا نناقش أهدافك ونبني استراتيجية نموك معاً.",
+      cta_card_btn: "احجز موعداً →",
+      rdv_label: "جدولة المواعيد",
+      rdv_title: "احجز",
+      rdv_title2: "موعداً",
+      rdv_sub: "اختر وقتاً متاحاً (الاثنين أو الأربعاء أو الجمعة) واستلم تأكيدك عبر البريد الإلكتروني.",
+      bk_name: "الاسم الكامل",
+      bk_name_ph: "اسمك الكامل",
+      bk_email: "البريد الإلكتروني",
+      bk_phone: "رقم الهاتف",
+      bk_btn: "تأكيد الموعد",
+      contact_label: "تواصل معنا",
+      contact_title: "تحدث معنا عن",
+      contact_title2: "مشروعك",
+      contact_sub: "اتركْ لنا اسمك وبريدك الإلكتروني <b>ورقم هاتفك</b> وتفاصيل مشروعك. سنرد عليك خلال 24 ساعة.",
+      contact_name_ph: "اسمك الكامل",
+      contact_email_ph: "بريدك الإلكتروني",
+      contact_phone_ph: "رقم هاتفك (مثال: +212...)",
+      contact_msg_ph: "صف مشروعك...",
+      contact_btn: "إرسال الرسالة",
+      or_text: "أو",
+      dir: "rtl"
+    }
+  };
+
+  let currentLang = 'fr';
+
+  function setLanguage(lang) {
+    currentLang = lang;
+    const t = translations[lang];
+
+    // Update active button
+    ['fr','en','ar'].forEach(l => {
+      document.getElementById('lang-' + l).classList.toggle('active', l === lang);
+    });
+
+    // Set page direction
+    document.documentElement.setAttribute('dir', t.dir);
+    document.documentElement.setAttribute('lang', lang);
+
+    // Translate all [data-i18n] elements
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      if (t[key] !== undefined) {
+        el.innerHTML = t[key];
+      }
+    });
+
+    // Translate placeholders [data-i18n-ph]
+    document.querySelectorAll('[data-i18n-ph]').forEach(el => {
+      const key = el.getAttribute('data-i18n-ph');
+      if (t[key] !== undefined) {
+        el.placeholder = t[key];
+      }
+    });
+
+    // Nav RTL: mirror nav direction but keep right section order fixed
+    const nav = document.querySelector('nav');
+    const navRight = document.querySelector('.nav-right');
+    if (lang === 'ar') {
+      nav.style.flexDirection = 'row-reverse';
+      navRight.style.flexDirection = 'row-reverse';
+    } else {
+      nav.style.flexDirection = 'row';
+      navRight.style.flexDirection = 'row';
+    }
+  }
+
+  // Init on load
+  setLanguage('fr');
 
 </script>
 

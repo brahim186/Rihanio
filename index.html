@@ -7,6 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -669,13 +670,21 @@
   }
   .social-link:hover { border-color: rgba(255,255,255,0.3); color: var(--white); }
 
-  /* قالب الـ PDF المخفي بالتصميم الجديد والجدول العصري */
+  /* قالب الـ PDF */
   #pdf-template {
-    display: none;
+    position: fixed;
+    top: -9999px;
+    left: -9999px;
+    width: 794px;
     background: #ffffff;
     color: #111111;
     padding: 40px;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Inter', Arial, sans-serif;
+    visibility: hidden;
+    z-index: -1;
+  }
+  #pdf-template.pdf-visible {
+    visibility: visible;
   }
   .pdf-container {
     max-width: 650px;
@@ -1425,6 +1434,9 @@
 
 
 <script>
+  // ── EmailJS Init ──
+  emailjs.init("tZynjADm4ILCFGfql");
+
   let currentYear, currentMonth;
   let selectedFullDateStr = "";
   
@@ -1614,7 +1626,7 @@
     /* ── Générer le QR Code ── */
     const qrContainer = document.getElementById('pdf-qr-code');
     qrContainer.innerHTML = '';
-    const qrData = `Rihanio RDV\nID: ${confirmId}\nNom: ${name}\nDate: ${date}\nHeure: ${time}\nEmail: ${email}\nTél: ${phone}`;
+    const qrData = `Rihanio RDV | ID: ${confirmId} | Nom: ${name} | Date: ${date} | Heure: ${time} | Email: ${email} | Tel: ${phone}`;
     new QRCode(qrContainer, {
       text: qrData,
       width: 120,
@@ -1625,31 +1637,110 @@
     });
 
     const element = document.getElementById('pdf-template');
-    element.style.display = 'block';
+    element.classList.add('pdf-visible');
 
+    // Attendre que le QR Code et le DOM soient prêts
     setTimeout(() => {
+      // Convertir le canvas QR en image pour html2canvas
+      const canvas = qrContainer.querySelector('canvas');
+      if (canvas) {
+        const imgEl = document.createElement('img');
+        imgEl.src = canvas.toDataURL('image/png');
+        imgEl.width = 120;
+        imgEl.height = 120;
+        canvas.replaceWith(imgEl);
+      }
+
       const opt = {
-        margin:      10,
+        margin:      [8, 8, 8, 8],
         filename:    'Confirmation_RDV_Rihanio_' + name.replace(/\s+/g, '_') + '.pdf',
         image:       { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2, useCORS: true, logging: false },
+        html2canvas: { scale: 2, useCORS: true, allowTaint: true, logging: false, backgroundColor: '#ffffff' },
         jsPDF:       { unit: 'mm', format: 'a4', orientation: 'portrait' }
       };
 
       html2pdf().set(opt).from(element).save().then(() => {
-        element.style.display = 'none';
-        /* ── Bloquer le créneau ── */
+        element.classList.remove('pdf-visible');
         bookSlot(selectedFullDateStr, time);
-        alert("✅ Félicitations ! Votre rendez-vous est confirmé.\nVotre confirmation PDF a été téléchargée.");
+        // ── Envoyer l'email de confirmation ──
+        sendConfirmationEmail(name, email, phone, date, time, confirmId);
+        alert("✅ Félicitations ! Votre rendez-vous est confirmé.\nVotre confirmation PDF a été téléchargée.\n📧 Un email de confirmation vous a été envoyé.");
         document.getElementById('main-booking-form').reset();
         selectedFullDateStr = "";
         timeSelect.disabled = true;
         timeSelect.innerHTML = '<option value="">Sélectionnez d\'abord une date</option>';
       }).catch(err => {
         console.error(err);
-        element.style.display = 'none';
+        element.classList.remove('pdf-visible');
+        alert("Erreur lors de la génération du PDF. Veuillez réessayer.");
       });
-    }, 300);
+    }, 600);
+  }
+
+  /* ------------------------------------------- */
+  /* ENVOI EMAIL DE CONFIRMATION (EmailJS)        */
+  /* ------------------------------------------- */
+  function sendConfirmationEmail(name, email, phone, date, time, confirmId) {
+
+    const messageFR = `Bonjour ${name},
+
+Nous espérons que vous allez bien.
+
+Nous avons le plaisir de vous confirmer votre rendez-vous avec l'équipe Rihanio, selon les informations suivantes :
+
+📅 Date        : ${date}
+🕐 Heure       : ${time}
+🔖 N° Dossier  : ${confirmId}
+📞 Téléphone   : ${phone}
+
+Nous vous prions de bien vouloir confirmer votre présence en répondant à cet e-mail.
+En cas d'empêchement ou pour toute modification, n'hésitez pas à nous contacter au moins 24h à l'avance.
+
+Nous nous réjouissons de vous accueillir prochainement.
+
+Cordialement,
+L'équipe RIHANIO
+Agence Digitale & Management`;
+
+    const messageAR = `عزيزي/عزيزتي ${name}،
+
+نتمنى أن تكون بخير.
+
+يسعدنا إبلاغكم بأنه قد تم تأكيد موعدكم مع فريق Rihanio، وذلك وفقاً للبيانات التالية:
+
+📅 التاريخ      : ${date}
+🕐 التوقيت      : ${time}
+🔖 رقم الملف    : ${confirmId}
+📞 رقم الهاتف   : ${phone}
+
+نرجو منكم تأكيد حضوركم بالرد على هذا البريد الإلكتروني.
+في حال وجود أي استفسارات أو الحاجة لتعديل الموعد، لا تترددوا في التواصل معنا قبل 24 ساعة على الأقل.
+
+نتطلع للقائكم قريباً.
+
+مع أطيب التحيات،
+فريق RIHANIO
+وكالة رقمية ومتعددة الخدمات`;
+
+    const templateParams = {
+      to_name:     name,
+      to_email:    email,
+      date_rdv:    date,
+      heure_rdv:   time,
+      confirm_id:  confirmId,
+      telephone:   phone,
+      message_fr:  messageFR,
+      message_ar:  messageAR,
+      reply_to:    'contact@rihanio.com'
+    };
+
+    emailjs.send("service_xyszcw5", "template_dqainy9", templateParams)
+      .then(() => {
+        console.log("✅ Email envoyé avec succès à " + email);
+      })
+      .catch((err) => {
+        console.warn("⚠ Erreur EmailJS:", err);
+      });
   }
 
   /* ------------------------------------------- */

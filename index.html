@@ -1607,7 +1607,7 @@
   // =============================================
   // ضع مفتاح Gemini API الخاص بك هنا
   // احصل عليه مجاناً من: https://aistudio.google.com/app/apikey
-  const GEMINI_API_KEY = "AQ.Ab8RN6Jfh94rS7n8w-lSphsIoKBbwgJYOj0HXsu5YCeWNMhSWA";
+  const GEMINI_API_KEY = "ضع_مفتاحك_هنا";
   // =============================================
 
   async function sendMiaMessage() {
@@ -1689,13 +1689,8 @@
       if (data.candidates && data.candidates[0] && data.candidates[0].content) {
         botReply = data.candidates[0].content.parts[0].text;
       } else {
-        const fallbacks = {
-          ar: "شكراً لرسالتك! يمكنك حجز موعد مباشرة من الموقع لنتحدث عن مشروعك.",
-          mor: "شكراً على الميساج! شد رنديفو من السيت باش نهدرو على المشروع ديالك.",
-          fr: "Merci pour votre message! Réservez un créneau pour discuter de votre projet.",
-          en: "Thank you! Book a slot on our website to discuss your project in detail."
-        };
-        botReply = fallbacks[selectedLanguage] || fallbacks['fr'];
+        // API أجابت لكن بدون محتوى → نستخدم الردود الذكية
+        botReply = getSmartFallback(text);
       }
 
       const replyTimeStr = new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
@@ -1714,32 +1709,76 @@
       miaChatBody.scrollTop = miaChatBody.scrollHeight;
 
     } catch (error) {
+      // خطأ في الشبكة أو الاتصال → نستخدم الردود الذكية بدل رسالة الخطأ
       const typingEl = document.getElementById(typingId);
       if (typingEl) typingEl.remove();
 
-      const errorFallbacks = {
-        ar: "عذراً، حدث خطأ في الاتصال. يرجى المحاولة مجدداً.",
-        mor: "سمحلي، كاين مشكل فالاتصال. عاود جرب من فضلك.",
-        fr: "Désolé, une erreur s'est produite. Réessayez ou contactez-nous directement.",
-        en: "Sorry, a connection error occurred. Please try again."
-      };
-      const errorMsg = errorFallbacks[selectedLanguage] || errorFallbacks['fr'];
+      const botReply = getSmartFallback(text);
       const replyTimeStr = new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
-      const errorMsgHTML = `
+      const fallbackMsgHTML = `
         <div class="mia-msg-wrapper bot" style="flex-direction: ${config.flexDir}; align-self: flex-start;">
           <div class="mia-avatar" style="${config.dir === 'rtl' ? 'margin-left:10px; margin-right:0;' : 'margin-right:10px; margin-left:0;'}">
             <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80" alt="Mia AI">
           </div>
           <div class="mia-bubble-container">
-            <div class="mia-bubble" style="background: #fff3f3; color: #c0392b; ${config.dir === 'rtl' ? 'border-top-left-radius:14px; border-top-right-radius:2px;' : 'border-top-right-radius:14px; border-top-left-radius:2px;'}">${errorMsg}</div>
+            <div class="mia-bubble" style="background: white; color: #111; ${config.dir === 'rtl' ? 'border-top-left-radius:14px; border-top-right-radius:2px;' : 'border-top-right-radius:14px; border-top-left-radius:2px;'}">${botReply}</div>
             <div class="mia-time" style="align-self: ${config.dir === 'rtl' ? 'flex-start' : 'flex-end'};">${replyTimeStr}</div>
           </div>
         </div>
       `;
-      miaChatBody.insertAdjacentHTML('beforeend', errorMsgHTML);
+      miaChatBody.insertAdjacentHTML('beforeend', fallbackMsgHTML);
       miaChatBody.scrollTop = miaChatBody.scrollHeight;
-      console.error("Gemini API Error:", error);
+      console.warn("Gemini API unavailable, using smart fallback.", error);
     }
+  }
+
+  // ردود ذكية احتياطية (نفس منطق الملف الأصلي) تعمل عند فشل API
+  function getSmartFallback(text) {
+    const lowText = text.toLowerCase();
+    let botResponse = "";
+
+    if (selectedLanguage === "ar") {
+      botResponse = "شكراً لرسالتك! سيقوم أحد مستشاري فريق Rihanio بمراجعة طلبك والتواصل معك في أقرب وقت. يمكنك أيضاً حجز موعد مباشرة عبر الموقع.";
+      if (lowText.includes('اربنب') || lowText.includes('airbnb') || lowText.includes('عقار')) {
+        botResponse = "تتيح لك خدمة تسيير Airbnb Premium زيادة عوائدك بنسبة 40% في المتوسط بفضل إدارتنا المتكاملة 24/7. هل ترغب في جدولة دراسة ربحية لعقارك؟";
+      } else if (lowText.includes('موقع') || lowText.includes('ويب') || lowText.includes('برمجة')) {
+        botResponse = "نحن نتميز بتصميم مواقع تعريفية ومتاجر إلكترونية حديثة، فائقة السرعة ومتوافقة مع معايير الـ SEO لجذب أكبر عدد من العملاء.";
+      } else if (lowText.includes('موعد') || lowText.includes('حجز')) {
+        botResponse = "يمكنك اختيار الوقت المناسب لك مباشرة من خلال قسم 'طلب موعد' على موقعنا، وستتمكن من تحميل تأكيد الحجز بصيغة PDF فوراً.";
+      }
+    }
+    else if (selectedLanguage === "mor") {
+      botResponse = "لهلا يخطيك، شكراً على الميساج ديالك! واحد من الفريق ديال Rihanio غادي يجاوبك فبلاصة. تقدر كاع تشد رنديفو ديريكت من السيت.";
+      if (lowText.includes('اربنب') || lowText.includes('airbnb') || lowText.includes('دار') || lowText.includes('عقار')) {
+        botResponse = "الخدمة ديال تسيير Airbnb Premium كطلع ليك المداخيل بـ 40% فالمعدل حيت كنهزو عليك ثقل الكراء والمقابلات 24/7. واش بغيتي نديرو دراسة للربح ديال دارك؟";
+      } else if (lowText.includes('موقع') || lowText.includes('سيت') || lowText.includes('ويب')) {
+        botResponse = "كنقادو سيتات ويب ومتاجر إلكترونية ناضية، خفيفة وبديزاين عصري لي يجيب ليك كليان جداد تال عندك.";
+      } else if (lowText.includes('موعد') || lowText.includes('رنديفو') || lowText.includes('بغات تشد')) {
+        botResponse = "تقدر تعزل النهار والوقت لي مسلكك فالفورمولير ديال الحجز الفوق، ومن بعد تيليشارجي الورقة ديالك PDF.";
+      }
+    }
+    else if (selectedLanguage === "en") {
+      botResponse = "Thank you for your message! A consultant from Rihanio's team will review your request and get back to you shortly. You can also book an appointment directly through our form.";
+      if (lowText.includes('airbnb') || lowText.includes('property') || lowText.includes('rental')) {
+        botResponse = "Our Premium Airbnb Management helps increase your revenue by 40% on average with 24/7 support. Would you like to schedule a profitability assessment?";
+      } else if (lowText.includes('website') || lowText.includes('web') || lowText.includes('development')) {
+        botResponse = "We design modern, fast, and SEO-optimized landing pages and e-commerce stores to scale up your sales.";
+      } else if (lowText.includes('book') || lowText.includes('appointment') || lowText.includes('meeting')) {
+        botResponse = "You can instantly select your preferred slot in our booking section and download your official confirmation as a PDF.";
+      }
+    }
+    else {
+      botResponse = "Merci pour votre message! Un conseiller de l'équipe Rihanio va analyser votre demande et vous recontactera sous peu. Vous pouvez également réserver un créneau via notre formulaire.";
+      if (lowText.includes('airbnb') || lowText.includes('immob') || lowText.includes('location')) {
+        botResponse = "Notre service Premium Airbnb vous permet d'augmenter vos revenus de +40% en moyenne grâce à notre gestion intégrale 24/7. Souhaitez-vous planifier une étude de rentabilité?";
+      } else if (lowText.includes('site') || lowText.includes('web') || lowText.includes('digital')) {
+        botResponse = "Nous concevons des sites vitrines et e-commerce modernes, ultra-rapides et optimisés SEO pour maximiser vos conversions.";
+      } else if (lowText.includes('rdv') || lowText.includes('rendez-vous') || lowText.includes('reserver')) {
+        botResponse = "Vous pouvez choisir votre créneau préféré directement dans la section 'Prendre RDV' de notre site web. C'est simple et vous recevrez un PDF instantané.";
+      }
+    }
+
+    return botResponse;
   }
 
   // --- كود قديم محذوف --- (كان هنا if/else وsetTimeout)

@@ -6,6 +6,7 @@
 <title>Rihanio — Agence Digitale & Management</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -1240,44 +1241,109 @@
 
 <div id="pdf-template">
   <div class="pdf-container">
+
+    <!-- HEADER -->
     <div class="pdf-header-center">
-      <img src="https://i.ibb.co/LXBT6kQM/Untitled-1.png" class="pdf-logo-center" alt="Logo">
+      <img src="https://i.ibb.co/LXBT6kQM/Untitled-1.png" class="pdf-logo-center" alt="Logo Rihanio">
       <div class="pdf-agency-name">RIHANIO</div>
-      <div class="pdf-sub">Agence Digitale & Management</div>
+      <div class="pdf-sub">Agence Digitale &amp; Management</div>
     </div>
-    
-    <div class="pdf-title-doc">CONFIRMATION OFFICIELLE DE RÉSERVATION</div>
-    
-    <table class="pdf-table">
-      <tr>
-        <th>Nom Complet</th>
-        <td><span id="pdf-out-name"></span></td>
-      </tr>
-      <tr>
-        <th>Adresse E-mail</th>
-        <td><span id="pdf-out-email"></span></td>
-      </tr>
-      <tr>
-        <th>Numéro de Téléphone</th>
-        <td><span id="pdf-out-phone"></span></td>
-      </tr>
-      <tr>
-        <th>Date du Rendez-vous</th>
-        <td><span id="pdf-out-date"></span></td>
-      </tr>
-      <tr>
-        <th>Heure de l'Entretien</th>
-        <td><span id="pdf-out-time"></span></td>
-      </tr>
-    </table>
-    
-    <div class="pdf-message">
-      Votre créneau horaire a été bloqué avec succès dans notre calendrier de gestion. Un expert de notre agence examinera vos informations professionnelles avant notre entretien afin de vous proposer des recommandations stratégiques personnalisées.
+
+    <!-- TITLE bilangue -->
+    <div style="text-align:center; margin-bottom:22px;">
+      <div style="font-size:17px;font-weight:800;color:#5e17eb;letter-spacing:-0.01em;">
+        CONFIRMATION OFFICIELLE DE RÉSERVATION
+      </div>
+      <div style="font-size:14px;font-weight:700;color:#333;margin-top:4px;font-family:'Segoe UI',Arial,sans-serif;direction:rtl;">
+        تأكيد رسمي للموعد
+      </div>
+      <div style="width:60px;height:3px;background:linear-gradient(90deg,#5e17eb,#c1ff72);margin:10px auto 0;border-radius:4px;"></div>
     </div>
-    
-    <div class="pdf-footer-thanks">
-      Merci pour votre confiance !
+
+    <!-- MAIN LAYOUT: table + QR -->
+    <div style="display:flex;gap:24px;align-items:flex-start;margin-bottom:24px;">
+
+      <!-- TABLE -->
+      <table class="pdf-table" style="flex:1;">
+        <tr>
+          <th>
+            <div>Nom &amp; Prénom</div>
+            <div style="font-weight:500;color:#888;font-size:11px;direction:rtl;">الاسم الكامل</div>
+          </th>
+          <td><span id="pdf-out-name" style="font-weight:700;"></span></td>
+        </tr>
+        <tr>
+          <th>
+            <div>Adresse E-mail</div>
+            <div style="font-weight:500;color:#888;font-size:11px;direction:rtl;">البريد الإلكتروني</div>
+          </th>
+          <td><span id="pdf-out-email"></span></td>
+        </tr>
+        <tr>
+          <th>
+            <div>Numéro de Téléphone</div>
+            <div style="font-weight:500;color:#888;font-size:11px;direction:rtl;">رقم الهاتف</div>
+          </th>
+          <td><span id="pdf-out-phone"></span></td>
+        </tr>
+        <tr>
+          <th>
+            <div>Date du Rendez-vous</div>
+            <div style="font-weight:500;color:#888;font-size:11px;direction:rtl;">تاريخ الموعد</div>
+          </th>
+          <td><span id="pdf-out-date" style="font-weight:700;color:#5e17eb;"></span></td>
+        </tr>
+        <tr>
+          <th>
+            <div>Heure du Rendez-vous</div>
+            <div style="font-weight:500;color:#888;font-size:11px;direction:rtl;">ساعة الموعد</div>
+          </th>
+          <td><span id="pdf-out-time" style="font-weight:700;color:#5e17eb;"></span></td>
+        </tr>
+        <tr>
+          <th>
+            <div>N° Confirmation</div>
+            <div style="font-weight:500;color:#888;font-size:11px;direction:rtl;">رقم التأكيد</div>
+          </th>
+          <td><span id="pdf-out-id" style="font-family:monospace;font-size:12px;background:#f3eeff;padding:2px 6px;border-radius:4px;color:#5e17eb;font-weight:700;"></span></td>
+        </tr>
+      </table>
+
+      <!-- QR CODE -->
+      <div style="text-align:center;flex-shrink:0;">
+        <div style="border:2px solid #5e17eb;border-radius:12px;padding:10px;display:inline-block;background:#fff;">
+          <div id="pdf-qr-code"></div>
+        </div>
+        <div style="font-size:10px;color:#888;margin-top:6px;">Scannez pour vérifier</div>
+        <div style="font-size:9px;color:#aaa;direction:rtl;">امسح للتحقق</div>
+      </div>
     </div>
+
+    <!-- MESSAGE bilangue -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;">
+      <div style="background:#f9f6ff;border:1px dashed #5e17eb;border-radius:8px;padding:14px;font-size:12.5px;line-height:1.6;color:#333;">
+        <strong style="color:#5e17eb;">📋 Important :</strong><br>
+        Votre créneau a été réservé avec succès. Merci de <strong>respecter l'heure</strong> de votre rendez-vous. En cas d'empêchement, veuillez nous contacter au moins <strong>24h à l'avance</strong>.
+      </div>
+      <div style="background:#f9f6ff;border:1px dashed #5e17eb;border-radius:8px;padding:14px;font-size:12.5px;line-height:1.6;color:#333;direction:rtl;text-align:right;font-family:'Segoe UI',Arial,sans-serif;">
+        <strong style="color:#5e17eb;">📋 تنبيه مهم :</strong><br>
+        تم تأكيد موعدك بنجاح. يُرجى <strong>احترام الوقت المحدد</strong> لموعدك. في حال عدم التمكن من الحضور، يُرجى إخطارنا قبل <strong>24 ساعة</strong> على الأقل.
+      </div>
+    </div>
+
+    <!-- FOOTER bilangue -->
+    <div style="border-top:2px solid #5e17eb;padding-top:16px;display:flex;justify-content:space-between;align-items:center;">
+      <div style="font-size:13px;font-weight:700;color:#5e17eb;">
+        Merci pour votre confiance ! 🙏
+      </div>
+      <div style="font-size:13px;font-weight:700;color:#5e17eb;direction:rtl;font-family:'Segoe UI',Arial,sans-serif;">
+        شكراً على ثقتكم ! 🙏
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:10px;font-size:10px;color:#bbb;">
+      rihanio.com · Instagram: @rihanio_ · WhatsApp disponible
+    </div>
+
   </div>
 </div>
 
@@ -1457,9 +1523,27 @@
     }
   });
 
+  /* ── Gestion des créneaux réservés via localStorage ── */
+  function getBookedSlots() {
+    try { return JSON.parse(localStorage.getItem('rihanio_bookings') || '{}'); }
+    catch(e) { return {}; }
+  }
+
+  function bookSlot(dateStr, timeSlot) {
+    const bookings = getBookedSlots();
+    if (!bookings[dateStr]) bookings[dateStr] = [];
+    if (!bookings[dateStr].includes(timeSlot)) bookings[dateStr].push(timeSlot);
+    localStorage.setItem('rihanio_bookings', JSON.stringify(bookings));
+  }
+
+  function isSlotBooked(dateStr, timeSlot) {
+    const bookings = getBookedSlots();
+    return bookings[dateStr] && bookings[dateStr].includes(timeSlot);
+  }
+
   function activateTimeSlots() {
     timeSelect.innerHTML = '';
-    const availableSlots = [
+    const allSlots = [
       "09:00 - 10:00",
       "10:30 - 11:30",
       "14:00 - 15:00",
@@ -1472,56 +1556,100 @@
     initialOption.textContent = '-- Choisir un créneau --';
     timeSelect.appendChild(initialOption);
 
-    availableSlots.forEach(slot => {
+    let hasAvailable = false;
+    allSlots.forEach(slot => {
       let option = document.createElement('option');
       option.value = slot;
-      option.textContent = slot;
+      if (isSlotBooked(selectedFullDateStr, slot)) {
+        option.textContent = slot + ' — Réservé 🔒';
+        option.disabled = true;
+        option.style.color = '#999';
+      } else {
+        option.textContent = slot;
+        hasAvailable = true;
+      }
       timeSelect.appendChild(option);
     });
+
+    if (!hasAvailable) {
+      timeSelect.innerHTML = '';
+      let noSlotOption = document.createElement('option');
+      noSlotOption.value = '';
+      noSlotOption.textContent = '⚠ Aucun créneau disponible ce jour';
+      timeSelect.appendChild(noSlotOption);
+      timeSelect.disabled = true;
+    }
   }
 
   function generateBookingPDF(event) {
     event.preventDefault();
 
-    const name = document.getElementById('bk-name').value;
-    const email = document.getElementById('bk-email').value;
-    const phone = document.getElementById('bk-phone').value;
-    const date = document.getElementById('bk-date').value;
-    const time = document.getElementById('bk-time').value;
+    const name  = document.getElementById('bk-name').value.trim();
+    const email = document.getElementById('bk-email').value.trim();
+    const phone = document.getElementById('bk-phone').value.trim();
+    const date  = document.getElementById('bk-date').value;
+    const time  = document.getElementById('bk-time').value;
 
     if (!time) {
       alert("Veuillez choisir un créneau horaire valide.");
       return;
     }
+    if (isSlotBooked(selectedFullDateStr, time)) {
+      alert("Ce créneau vient d'être réservé. Veuillez en choisir un autre.");
+      activateTimeSlots();
+      return;
+    }
 
-    document.getElementById('pdf-out-name').textContent = name;
+    /* ── Générer un ID unique de confirmation ── */
+    const confirmId = 'RDV-' + Date.now().toString(36).toUpperCase();
+
+    /* ── Remplir le template PDF ── */
+    document.getElementById('pdf-out-name').textContent  = name;
     document.getElementById('pdf-out-email').textContent = email;
     document.getElementById('pdf-out-phone').textContent = phone;
-    document.getElementById('pdf-out-date').textContent = date;
-    document.getElementById('pdf-out-time').textContent = time;
+    document.getElementById('pdf-out-date').textContent  = date;
+    document.getElementById('pdf-out-time').textContent  = time;
+    document.getElementById('pdf-out-id').textContent    = confirmId;
+
+    /* ── Générer le QR Code ── */
+    const qrContainer = document.getElementById('pdf-qr-code');
+    qrContainer.innerHTML = '';
+    const qrData = `Rihanio RDV\nID: ${confirmId}\nNom: ${name}\nDate: ${date}\nHeure: ${time}\nEmail: ${email}\nTél: ${phone}`;
+    new QRCode(qrContainer, {
+      text: qrData,
+      width: 120,
+      height: 120,
+      colorDark: '#5e17eb',
+      colorLight: '#ffffff',
+      correctLevel: QRCode.CorrectLevel.M
+    });
 
     const element = document.getElementById('pdf-template');
     element.style.display = 'block';
 
-    const opt = {
-      margin:       15,
-      filename:     'Rendez_vous_Rihanio_' + name.replace(/\s+/g, '_') + '.pdf',
-      image:        { type: 'jpeg', quality: 0.98 },
-      html2canvas:  { scale: 2, useCORS: true },
-      jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
-    };
+    setTimeout(() => {
+      const opt = {
+        margin:      10,
+        filename:    'Confirmation_RDV_Rihanio_' + name.replace(/\s+/g, '_') + '.pdf',
+        image:       { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true, logging: false },
+        jsPDF:       { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      };
 
-    html2pdf().set(opt).from(element).save().then(() => {
-      element.style.display = 'none';
-      alert("Félicitations ! Votre rendez-vous est validé et votre confirmation officielle PDF a été téléchargée.");
-      document.getElementById('main-booking-form').reset();
-      selectedFullDateStr = "";
-      timeSelect.disabled = true;
-      timeSelect.innerHTML = '<option value="">Sélectionnez d\'abord une date</option>';
-    }).catch(err => {
-      console.error(err);
-      element.style.display = 'none';
-    });
+      html2pdf().set(opt).from(element).save().then(() => {
+        element.style.display = 'none';
+        /* ── Bloquer le créneau ── */
+        bookSlot(selectedFullDateStr, time);
+        alert("✅ Félicitations ! Votre rendez-vous est confirmé.\nVotre confirmation PDF a été téléchargée.");
+        document.getElementById('main-booking-form').reset();
+        selectedFullDateStr = "";
+        timeSelect.disabled = true;
+        timeSelect.innerHTML = '<option value="">Sélectionnez d\'abord une date</option>';
+      }).catch(err => {
+        console.error(err);
+        element.style.display = 'none';
+      });
+    }, 300);
   }
 
   /* ------------------------------------------- */

@@ -1518,7 +1518,110 @@
       element.style.display = 'none';
     });
   }
-setTimeout(() => {
+
+  /* ------------------------------------------- */
+  /* CHATBOT FUNCTIONS (MIA)         */
+  /* ------------------------------------------- */
+  const miaWindow = document.getElementById('mia-window');
+  const miaInput = document.getElementById('mia-input');
+  const miaChatBody = document.getElementById('mia-chat-body');
+  
+  let selectedLanguage = "";
+
+  const langInterfaces = {
+    ar: { dir: "rtl", align: "right", placeholder: "اطرح سؤالاً...", disclaimer: "⚠ الإجابات تولد تلقائياً وقد تحتوي على أخطاء. <a href='#services'>مزيد من المعلومات</a>.", timeline: "اليوم", badge: "نسخة تجريبية", flexDir: "row-reverse" },
+    mor: { dir: "rtl", align: "right", placeholder: "سولني شي حاجة...", disclaimer: "⚠ الأجوبة كتخرج أوتوماتيك وتقدر تغلط. <a href='#services'>معلومات أكثر</a>.", timeline: "اليوم", badge: "نسخة تجريبية", flexDir: "row-reverse" },
+    fr: { dir: "ltr", align: "left", placeholder: "Posez une question...", disclaimer: "⚠ Les réponses de l'IA peuvent contenir des erreurs. <a href='#services'>Plus d'infos</a>.", timeline: "Aujourd'hui", badge: "Beta", flexDir: "row" },
+    en: { dir: "ltr", align: "left", placeholder: "Ask a question...", disclaimer: "⚠ AI responses may contain inaccuracies. <a href='#services'>More info</a>.", timeline: "Today", badge: "Beta", flexDir: "row" }
+  };
+
+  const langWelcomes = {
+    ar: "ممتاز! تم تفعيل اللغة العربية. كيف يمكنني مساعدتك اليوم بخصوص خدمات Rihanio؟",
+    mor: "صافي واجدة! دبا نهدرو بالدارجة. باش قدرنا نعاونوك اليوم فالمشروع ديالك؟",
+    fr: "Parfait! Langue française activée. Comment puis-je vous aider aujourd'hui avec les services de Rihanio?",
+    en: "Perfect! English language activated. How can I help you today with Rihanio's services?"
+  };
+
+  function toggleMiaChat() {
+    if (miaWindow.style.display === 'flex') {
+      miaWindow.style.display = 'none';
+    } else {
+      miaWindow.style.display = 'flex';
+      miaChatBody.scrollTop = miaChatBody.scrollHeight;
+    }
+  }
+
+  function handleMiaKey(e) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      sendMiaMessage();
+    }
+  }
+
+  function selectMiaLanguage(lang) {
+    selectedLanguage = lang;
+    const config = langInterfaces[lang];
+
+    miaWindow.style.direction = config.dir;
+    miaWindow.style.textAlign = config.align;
+    miaInput.placeholder = config.placeholder;
+    miaInput.disabled = false;
+    
+    document.getElementById('mia-disclaimer-text').innerHTML = config.disclaimer;
+    document.getElementById('mia-timeline-text').textContent = config.timeline;
+    document.getElementById('mia-badge-text').textContent = config.badge;
+    document.getElementById('mia-header-element').style.flexDirection = config.flexDir;
+    document.getElementById('mia-header-element').querySelector('.mia-header-title').style.flexDirection = config.flexDir;
+    document.getElementById('mia-header-element').querySelector('.mia-header-actions').style.flexDirection = config.flexDir;
+    document.getElementById('mia-input-box-container').style.flexDirection = config.flexDir;
+
+    if(config.dir === "rtl") {
+      document.getElementById('mia-send-button-element').style.transform = "scaleX(-1)";
+    } else {
+      document.getElementById('mia-send-button-element').style.transform = "scaleX(1)";
+    }
+
+    document.getElementById('mia-lang-container').style.display = "none";
+
+    const timeStr = new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+    const welcomeHTML = `
+      <div class="mia-msg-wrapper bot" style="flex-direction: ${config.flexDir}; margin-top: 10px;">
+        <div class="mia-avatar" style="${config.dir === 'rtl' ? 'margin-left:10px; margin-right:0;' : 'margin-right:10px; margin-left:0;'}">
+          <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80" alt="Mia AI">
+        </div>
+        <div class="mia-bubble-container">
+          <div class="mia-bubble" style="background: white; color: #111; ${config.dir === 'rtl' ? 'border-top-left-radius:14px; border-top-right-radius:2px;' : 'border-top-right-radius:14px; border-top-left-radius:2px;'}">${langWelcomes[lang]}</div>
+          <div class="mia-time" style="align-self: ${config.dir === 'rtl' ? 'flex-start' : 'flex-end'};">${timeStr}</div>
+        </div>
+      </div>
+    `;
+    miaChatBody.insertAdjacentHTML('beforeend', welcomeHTML);
+    miaChatBody.scrollTop = miaChatBody.scrollHeight;
+  }
+
+  function sendMiaMessage() {
+    const text = miaInput.value.trim();
+    if (!text) return;
+
+    const timeStr = new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+    const config = langInterfaces[selectedLanguage];
+
+    const userMsgHTML = `
+      <div class="mia-msg-wrapper user" style="flex-direction: ${config.flexDir}; align-self: flex-end;">
+        <div class="mia-avatar" style="background:#555; ${config.dir === 'rtl' ? 'margin-right:10px; margin-left:0;' : 'margin-left:10px; margin-right:0;'}">
+          <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&auto=format&fit=crop&q=80" alt="User">
+        </div>
+        <div class="mia-bubble-container">
+          <div class="mia-bubble" style="background: var(--purple); color: var(--white); ${config.dir === 'rtl' ? 'border-top-right-radius:14px; border-top-left-radius:2px;' : 'border-top-left-radius:14px; border-top-right-radius:2px;'}">${text}</div>
+          <div class="mia-time" style="align-self: ${config.dir === 'rtl' ? 'flex-end' : 'flex-start'};">${timeStr}</div>
+        </div>
+      </div>
+    `;
+    miaChatBody.insertAdjacentHTML('beforeend', userMsgHTML);
+    miaInput.value = '';
+    miaChatBody.scrollTop = miaChatBody.scrollHeight;
+
+    setTimeout(() => {
       let botResponse = "";
       const lowText = text.toLowerCase();
       
@@ -1566,9 +1669,8 @@ setTimeout(() => {
       `;
       miaChatBody.insertAdjacentHTML('beforeend', botMsgHTML);
       miaChatBody.scrollTop = miaChatBody.scrollHeight;
-    }, 1000); // إضافة رسالة خطأ بسيطة في حال فشل الاتصال
+    }, 1000);
   }
-
 </script>
 
 </body>

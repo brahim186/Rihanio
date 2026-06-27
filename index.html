@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Rihanio — Agence Digitale & Management</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
@@ -188,6 +190,7 @@
     display: inline-block;
   }
   .btn-secondary:hover { border-color: rgba(255,255,255,0.3); color: var(--white); background: rgba(255,255,255,0.04); }
+  
   .hero-metrics {
     margin-top: 80px;
     display: flex;
@@ -275,11 +278,7 @@
     margin-bottom: 20px;
     overflow: hidden;
   }
-  .card-icon img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-  }
+  .card-icon img { width: 100%; height: 100%; object-fit: contain; }
   .icon-purple { background: rgba(94,23,235,0.2); }
   .icon-lime { background: rgba(193,255,114,0.12); }
   .icon-yellow { background: rgba(234,255,7,0.12); }
@@ -293,11 +292,7 @@
     align-items: center;
     justify-content: center;
   }
-  .cta-icon-box img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-  }
+  .cta-icon-box img { width: 100%; height: 100%; object-fit: contain; }
 
   .card-num {
     font-size: 11px;
@@ -343,6 +338,165 @@
     margin-bottom: 14px;
     border: 1px solid rgba(193,255,114,0.2);
   }
+
+  /* BOOKING SECTION */
+  .booking-section {
+    padding: 100px 24px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  .booking-box {
+    background: var(--gray-mid);
+    border: 1px solid var(--gray-border);
+    border-radius: 28px;
+    padding: 64px 48px;
+    position: relative;
+    overflow: visible;
+  }
+  .booking-box h2 {
+    font-size: clamp(26px, 4vw, 44px);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    margin-bottom: 12px;
+  }
+  .booking-box p {
+    color: var(--gray-text);
+    font-size: 15px;
+    margin-bottom: 32px;
+  }
+  .booking-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: left;
+  }
+  .booking-form .full-width { grid-column: span 2; }
+  .booking-form label {
+    display: block;
+    font-size: 13px;
+    color: rgba(255,255,255,0.8);
+    margin-bottom: 6px;
+    font-weight: 500;
+  }
+  .booking-form input,
+  .booking-form select {
+    width: 100%;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--gray-border);
+    border-radius: 12px;
+    padding: 14px 18px;
+    color: var(--white);
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .booking-form input:focus,
+  .booking-form select:focus { border-color: var(--lime); }
+  .booking-form select option { background: var(--gray-mid); color: var(--white); }
+  
+  /* MODERN CUSTOM DATEPICKER */
+  .date-input-wrapper {
+    position: relative;
+  }
+  .date-input-wrapper input {
+    cursor: pointer;
+  }
+  .calendar-popup {
+    display: none;
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    width: 100%;
+    min-width: 280px;
+    background: #151515;
+    border: 1px solid var(--gray-border);
+    border-radius: 16px;
+    padding: 16px;
+    z-index: 200;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  }
+  .calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+  .calendar-header span {
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--white);
+  }
+  .calendar-header button {
+    background: none;
+    border: none;
+    color: var(--lime);
+    cursor: pointer;
+    font-size: 16px;
+    padding: 4px 8px;
+  }
+  .calendar-weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    text-align: center;
+    font-size: 11px;
+    color: var(--gray-text);
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+  .calendar-days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+  }
+  .calendar-day {
+    text-align: center;
+    padding: 8px 0;
+    font-size: 13px;
+    border-radius: 8px;
+    color: var(--white);
+    font-weight: 500;
+  }
+  .calendar-day.allowed {
+    background: rgba(193,255,114,0.1);
+    border: 1px solid rgba(193,255,114,0.2);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .calendar-day.allowed:hover {
+    background: var(--lime);
+    color: var(--black);
+  }
+  .calendar-day.allowed.selected {
+    background: var(--lime);
+    color: var(--black);
+    box-shadow: 0 0 12px rgba(193,255,114,0.4);
+  }
+  .calendar-day.disabled {
+    color: #444444;
+    background: rgba(255,255,255,0.01);
+    cursor: not-allowed !important;
+  }
+  .calendar-day.disabled:hover {
+    cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'><text y='14' font-size='14'>🚫</text></svg>"), not-allowed !important;
+  }
+  
+  .btn-booking {
+    grid-column: span 2;
+    background: var(--lime);
+    color: var(--black);
+    border: none;
+    padding: 16px;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.25s;
+    margin-top: 10px;
+    box-shadow: 0 0 20px rgba(193,255,114,0.2);
+  }
+  .btn-booking:hover { transform: translateY(-1px); box-shadow: 0 0 35px rgba(193,255,114,0.4); background: #d4ff8f; }
 
   /* CONTACT */
   .contact {
@@ -498,11 +652,7 @@
     transition: color 0.2s;
   }
   .footer-links a:hover { color: var(--white); }
-  .footer-social {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-  }
+  .footer-social { display: flex; align-items: center; gap: 14px; }
   .social-link {
     width: 36px;
     height: 36px;
@@ -518,20 +668,364 @@
   }
   .social-link:hover { border-color: rgba(255,255,255,0.3); color: var(--white); }
 
+  /* قالب الـ PDF المخفي بالتصميم الجديد والجدول العصري */
+  #pdf-template {
+    display: none;
+    background: #ffffff;
+    color: #111111;
+    padding: 40px;
+    font-family: 'Inter', sans-serif;
+  }
+  .pdf-container {
+    max-width: 650px;
+    margin: 0 auto;
+  }
+  .pdf-header-center {
+    text-align: center;
+    border-bottom: 2px solid #5e17eb;
+    padding-bottom: 24px;
+    margin-bottom: 30px;
+  }
+  .pdf-logo-center {
+    width: 75px;
+    height: 75px;
+    object-fit: contain;
+    margin-bottom: 10px;
+  }
+  .pdf-agency-name {
+    font-size: 26px;
+    font-weight: 800;
+    color: #5e17eb;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+  }
+  .pdf-sub {
+    font-size: 12px;
+    color: #666666;
+    margin-top: 4px;
+    font-weight: 500;
+  }
+  .pdf-title-doc {
+    font-size: 18px;
+    font-weight: 700;
+    color: #111111;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  .pdf-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 30px;
+    font-size: 14px;
+  }
+  .pdf-table th, .pdf-table td {
+    border: 1px solid #e0e0e0;
+    padding: 12px 16px;
+    text-align: left;
+  }
+  .pdf-table th {
+    background-color: #f8f9fa;
+    color: #5e17eb;
+    font-weight: 700;
+    width: 40%;
+  }
+  .pdf-table td {
+    color: #333333;
+    font-weight: 500;
+  }
+  .pdf-message {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #444444;
+    text-align: center;
+    background: #fbf9ff;
+    border: 1px dashed #5e17eb;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 30px;
+  }
+  .pdf-footer-thanks {
+    text-align: center;
+    font-size: 15px;
+    font-weight: 700;
+    color: #5e17eb;
+    border-top: 1px solid #eeeeee;
+    padding-top: 20px;
+  }
+
+  /* ------------------------------------------- */
+  /* CHATBOT STYLES (MIA)          */
+  /* ------------------------------------------- */
+  
+  /* Floating Widget Icon Button */
+  .mia-widget-btn {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: var(--white);
+    border: 3px solid var(--white);
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.4), 0 0 30px rgba(94, 23, 235, 0.3);
+    cursor: pointer;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .mia-widget-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 25px rgba(255, 255, 255, 0.6), 0 0 35px rgba(94, 23, 235, 0.5);
+  }
+  .mia-widget-btn img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .mia-widget-btn::before {
+    content: "";
+    position: absolute;
+    top: -2px;
+    left: -6px;
+    width: 16px;
+    height: 16px;
+    background: var(--white);
+    clip-path: polygon(100% 0, 0 100%, 100% 100%);
+    transform: rotate(-15deg);
+  }
+
+  /* Chat Window Interface Container */
+  .mia-chat-window {
+    position: fixed;
+    bottom: 100px;
+    right: 24px;
+    width: 380px;
+    height: 580px;
+    background: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+    z-index: 1000;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    font-family: 'Inter', sans-serif;
+  }
+  
+  /* Chat Header */
+  .mia-header {
+    background: var(--purple);
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: var(--white);
+  }
+  .mia-header-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 700;
+    font-size: 18px;
+    letter-spacing: -0.01em;
+  }
+  .mia-badge {
+    background: rgba(255, 255, 255, 0.2);
+    color: var(--white);
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 500;
+  }
+  .mia-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .mia-action-btn {
+    background: none;
+    border: none;
+    color: var(--white);
+    opacity: 0.8;
+    cursor: pointer;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.2s;
+  }
+  .mia-action-btn:hover { opacity: 1; }
+
+  /* Chat Content / Messages Body */
+  .mia-body {
+    flex: 1;
+    background: #f4f5f7;
+    padding: 20px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .mia-timeline {
+    text-align: center;
+    margin: 8px 0;
+  }
+  .mia-timeline span {
+    background: var(--white);
+    color: var(--gray-text);
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+    border: 1px solid #eef0f3;
+  }
+
+  /* Message Structure */
+  .mia-msg-wrapper {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    max-width: 85%;
+  }
+  .mia-msg-wrapper.bot { align-self: flex-start; }
+  .mia-msg-wrapper.user { align-self: flex-end; }
+  
+  /* Message Avatars */
+  .mia-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+    background: var(--purple);
+  }
+  .mia-avatar img { width: 100%; height: 100%; object-fit: cover; }
+  
+  /* Message Bubble */
+  .mia-bubble-container {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .mia-bubble {
+    padding: 12px 16px;
+    border-radius: 14px;
+    font-size: 13.5px;
+    line-height: 1.5;
+    color: #111111;
+  }
+  .mia-msg-wrapper.bot .mia-bubble {
+    background: var(--white);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+  }
+  .mia-msg-wrapper.user .mia-bubble {
+    background: var(--purple);
+    color: var(--white);
+    box-shadow: 0 2px 6px rgba(94, 23, 235, 0.15);
+  }
+  .mia-time {
+    font-size: 10px;
+    color: #999999;
+  }
+
+  /* Chat Footer & Input Field Container */
+  .mia-footer {
+    background: var(--white);
+    padding: 16px;
+    border-top: 1px solid #eee;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .mia-input-box {
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #fafafa;
+    transition: border-color 0.2s;
+  }
+  .mia-input-box:focus-within {
+    border-color: var(--purple);
+    background: var(--white);
+  }
+  .mia-input-box textarea {
+    flex: 1;
+    border: none;
+    background: none;
+    outline: none;
+    resize: none;
+    color: #111111;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    height: 24px;
+    line-height: 24px;
+  }
+  .mia-input-box textarea::placeholder { color: #aaa; }
+  .mia-send-btn {
+    background: var(--purple);
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    color: var(--white);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s, transform 0.1s;
+  }
+  .mia-send-btn:hover {
+    background: #450ec2;
+    transform: scale(1.05);
+  }
+  .mia-send-btn svg {
+    width: 14px;
+    height: 14px;
+    fill: currentColor;
+  }
+  
+  .mia-disclaimer {
+    font-size: 11px;
+    color: #888888;
+    text-align: center;
+    line-height: 1.4;
+  }
+  .mia-disclaimer a { color: #555555; text-decoration: underline; }
+
   @media (max-width: 768px) {
     .bento-card.wide, .bento-card.narrow, .bento-card.half { grid-column: span 12; }
     .nav-links { display: none; }
-    .contact-box { padding: 40px 24px; }
+    .contact-box, .booking-box { padding: 40px 24px; }
+    .booking-form { grid-template-columns: 1fr; }
+    .booking-form .full-width { grid-column: span 1; }
     footer { flex-direction: column; align-items: flex-start; }
     .hero-metrics { gap: 28px; }
     .social-buttons-container { flex-direction: column; width: 100%; }
     .insta-btn, .whatsapp-btn { width: 100%; justify-content: center; }
+    
+    /* Responsive Chat Window */
+    .mia-chat-window {
+      width: calc(100% - 32px);
+      height: 70vh;
+      bottom: 90px;
+      right: 16px;
+    }
+    .mia-widget-btn {
+      bottom: 16px;
+      right: 16px;
+    }
   }
 </style>
 </head>
 <body>
 
-<!-- NAV -->
 <nav>
   <div class="nav-logo">
     <img src="https://i.ibb.co/LXBT6kQM/Untitled-1.png" alt="Logo Rihanio">
@@ -539,22 +1033,20 @@
   <ul class="nav-links">
     <li><a href="#services">Services</a></li>
     <li><a href="#apropos">À Propos</a></li>
+    <li><a href="#rdv">Prendre RDV</a></li>
     <li><a href="#contact">Contact</a></li>
   </ul>
-  <!-- تم جعل زر النوت التفاعلي ينزل إلى قسم الاتصال مباشرة عند الضغط عليه -->
-  <a href="#contact" class="btn-nav">Discutons de votre projet</a>
+  <a href="#rdv" class="btn-nav">Réserver un RDV</a>
 </nav>
 
-<!-- HERO -->
 <section class="hero" id="apropos">
   <div class="hero-bg-glow"></div>
   <div class="hero-badge"><span class="hero-badge-dot"></span>Agence Digitale & Management</div>
   <h1>Propulsez votre <span class="accent-purple">visibilité</span> et vos <span class="accent-lime">rendements immobiliers</span> au niveau supérieur.</h1>
   <p class="hero-sub">Nous combinons la puissance du digital et l'expertise immobilière pour maximiser vos performances et accélérer votre croissance.</p>
   
-  <!-- الأزرار التفاعلية المحدثة للتنقل السلس داخل الصفحة -->
   <div class="hero-ctas">
-    <a href="#contact" class="btn-primary">Démarrer maintenant →</a>
+    <a href="#rdv" class="btn-primary">Prendre RDV en ligne →</a>
     <a href="#services" class="btn-secondary">Voir nos services</a>
   </div>
 
@@ -576,14 +1068,11 @@
 
 <div class="section-divider"></div>
 
-<!-- SERVICES -->
 <section class="services" id="services">
   <span class="section-label">Nos expertises</span>
   <h2 class="section-title">Des solutions <span>complètes</span> sur mesure</h2>
 
   <div class="bento">
-
-    <!-- Card 1 — Réseaux Sociaux (wide) -->
     <div class="bento-card wide">
       <div class="card-glow glow-purple"></div>
       <div class="card-num">01</div>
@@ -591,10 +1080,9 @@
         <img src="https://i.ibb.co/Qh3PHsp/image.png" alt="Gestion des Réseaux Sociaux">
       </div>
       <div class="card-title">Gestion des Réseaux Sociaux</div>
-      <div class="card-text">Création de contenu complet (visuels et textes), planification des publications, et animation quotidienne de vos communautés pour bâtir une présence forte et engagée.</div>
+      <div class="card-text">Création de contenu complet (visuels et textes), planification des publications, and animation quotidienne de vos communautés pour bâtir une présence forte et engagée.</div>
     </div>
 
-    <!-- Card 2 — Site Internet (narrow) -->
     <div class="bento-card narrow">
       <div class="card-glow glow-lime"></div>
       <div class="card-num">02</div>
@@ -605,7 +1093,6 @@
       <div class="card-text">Conception et développement de sites vitrines et de boutiques e-commerce modernes, rapides et adaptés aux mobiles.</div>
     </div>
 
-    <!-- Card 3 — Airbnb (full) -->
     <div class="bento-card full">
       <div class="card-glow glow-yellow"></div>
       <div class="card-pill">Service Premium</div>
@@ -633,7 +1120,6 @@
       </div>
     </div>
 
-    <!-- Card 4 — Rentabilité (half) -->
     <div class="bento-card half">
       <div class="card-glow glow-pink"></div>
       <div class="card-num">04</div>
@@ -644,32 +1130,75 @@
       <div class="card-text">Nous aidons les entrepreneurs et les investisseurs immobiliers à valider la viabilité financière de leurs projets avant de s'engager.</div>
     </div>
 
-    <!-- CTA mini card -->
     <div class="bento-card half" style="display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;background:linear-gradient(135deg,rgba(94,23,235,0.25),rgba(94,23,235,0.05));border-color:rgba(94,23,235,0.3);">
       <div class="cta-icon-box">
         <img src="https://i.ibb.co/Kj0pV6Lx/image.png" alt="Prêt à scaler">
       </div>
       <div style="font-size:18px;font-weight:700;margin-bottom:10px;letter-spacing:-0.02em;">Prêt à scaler ?</div>
-      <div style="font-size:13px;color:var(--gray-text);margin-bottom:24px;">Discutons de vos objectifs et construisons ensemble votre战略 de croissance.</div>
-      <a href="#contact" class="btn-primary" style="font-size:13px;padding:11px 22px;">Prendre rendez-vous →</a>
+      <div style="font-size:13px;color:var(--gray-text);margin-bottom:24px;">Discutons de vos objectifs and construisons ensemble votre stratégie de croissance.</div>
+      <a href="#rdv" class="btn-primary" style="font-size:13px;padding:11px 22px;">Prendre rendez-vous →</a>
     </div>
-
   </div>
 </section>
 
 <div class="section-divider"></div>
 
-<!-- CONTACT -->
+<section class="booking-section" id="rdv">
+  <div class="booking-box" style="text-align: center;">
+    <span class="section-label" style="display:block;margin-bottom:14px;color:var(--lime);">Planification</span>
+    <h2>Réserver un <span style="color:var(--lime)">Rendez-vous</span></h2>
+    <p>Choisissez un créneau disponible (Lundi, Mercredi ou Vendredi) et téléchargez votre confirmation officielle en PDF.</p>
+    
+    <form class="booking-form" id="main-booking-form" onsubmit="generateBookingPDF(event)">
+      <div class="full-width">
+        <label for="bk-name">Nom complet</label>
+        <input type="text" id="bk-name" required placeholder="Votre nom complet">
+      </div>
+      <div>
+        <label for="bk-email">Adresse e-mail</label>
+        <input type="email" id="bk-email" required placeholder="exemple@mail.com">
+      </div>
+      <div>
+        <label for="bk-phone">Numéro de téléphone</label>
+        <input type="tel" id="bk-phone" required placeholder="+212...">
+      </div>
+      <div class="date-input-wrapper">
+        <label for="bk-date">Date du rendez-vous</label>
+        <input type="text" id="bk-date" required readonly placeholder="Choisir une date..." onclick="toggleCalendarPopup(event)">
+        
+        <div class="calendar-popup" id="custom-calendar-popup">
+          <div class="calendar-header">
+            <button type="button" onclick="changeCalendarMonth(-1)">❬</button>
+            <span id="calendar-month-year"></span>
+            <button type="button" onclick="changeCalendarMonth(1)">❭</button>
+          </div>
+          <div class="calendar-weekdays">
+            <div>Dim</div><div>Lun</div><div>Mar</div><div>Mer</div><div>Jeu</div><div>Ven</div><div>Sam</div>
+          </div>
+          <div class="calendar-days" id="calendar-days-container"></div>
+        </div>
+      </div>
+      <div>
+        <label for="bk-time">Heure disponible</label>
+        <select id="bk-time" required disabled>
+          <option value="">Sélectionnez d'abord une date</option>
+        </select>
+      </div>
+      <button type="submit" class="btn-booking">Confirmer le rendez-vous & Télécharger le PDF</button>
+    </form>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
 <section class="contact" id="contact">
   <div class="contact-box">
     <div class="contact-glow"></div>
     <span class="section-label" style="display:block;margin-bottom:14px;">Contact</span>
     <h2>Parlons de votre <span style="color:var(--purple)">projet</span></h2>
-    <p>Laissez-nous votre nom, e-mail, <b>numéro de téléphone</b> et les détails de votre projet. Nous vous répondrون sous 24h.</p>
+    <p>Laissez-nous votre nom, e-mail, <b>numéro de téléphone</b> et les détails de votre projet. Nous vous répondrons sous 24h.</p>
 
-    <!-- توجيه بيانات الفورم مباشرة إلى بريدك الإلكتروني عبر Formsubmit -->
     <form class="contact-form" action="https://formsubmit.co/erraihanibrahim186@gmail.com" method="POST">
-      <!-- تعطيل الكابتشا المزعجة لتسهيل تجربة العميل -->
       <input type="hidden" name="_captcha" value="false">
       
       <input type="text" name="Nom Complet" placeholder="Votre nom complet" required>
@@ -688,10 +1217,9 @@
       </div>
     </div>
 
-    <!-- أزرار وسائل التواصل الاجتماعي مصفوفة جنباً إلى جنب بشكل تفاعلي -->
     <div class="social-buttons-container">
       <a class="insta-btn" href="https://www.instagram.com/rihanio_?igsh=MTN0Y2g4NjN4NnNuOQ%3D%3D&utm_source=qr" target="_blank" rel="noopener noreferrer">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="white"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="white"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0 3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
         Instagram
       </a>
       
@@ -705,7 +1233,49 @@
   </div>
 </section>
 
-<!-- FOOTER -->
+<div id="pdf-template">
+  <div class="pdf-container">
+    <div class="pdf-header-center">
+      <img src="https://i.ibb.co/LXBT6kQM/Untitled-1.png" class="pdf-logo-center" alt="Logo">
+      <div class="pdf-agency-name">RIHANIO</div>
+      <div class="pdf-sub">Agence Digitale & Management</div>
+    </div>
+    
+    <div class="pdf-title-doc">CONFIRMATION OFFICIELLE DE RÉSERVATION</div>
+    
+    <table class="pdf-table">
+      <tr>
+        <th>Nom Complet</th>
+        <td><span id="pdf-out-name"></span></td>
+      </tr>
+      <tr>
+        <th>Adresse E-mail</th>
+        <td><span id="pdf-out-email"></span></td>
+      </tr>
+      <tr>
+        <th>Numéro de Téléphone</th>
+        <td><span id="pdf-out-phone"></span></td>
+      </tr>
+      <tr>
+        <th>Date du Rendez-vous</th>
+        <td><span id="pdf-out-date"></span></td>
+      </tr>
+      <tr>
+        <th>Heure de l'Entretien</th>
+        <td><span id="pdf-out-time"></span></td>
+      </tr>
+    </table>
+    
+    <div class="pdf-message">
+      Votre créneau horaire a été bloqué avec succès dans notre calendrier de gestion. Un expert de notre agence examinera vos informations professionnelles avant notre entretien afin de vous proposer des recommandations stratégiques personnalisées.
+    </div>
+    
+    <div class="pdf-footer-thanks">
+      Merci pour votre confiance !
+    </div>
+  </div>
+</div>
+
 <footer>
   <div class="footer-left">
     <div class="footer-logo">
@@ -719,10 +1289,268 @@
   </div>
   <div class="footer-social">
     <a class="social-link" href="https://www.instagram.com/rihanio_?igsh=MTN0Y2g4NjN4NnNuOQ%3D%3D&utm_source=qr" target="_blank" rel="noopener noreferrer" title="Instagram">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0 3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
     </a>
   </div>
 </footer>
+
+
+<div class="mia-widget-btn" id="mia-trigger" onclick="toggleMiaChat()">
+  <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80" alt="Mia AI Avatar">
+</div>
+
+<div class="mia-chat-window" id="mia-window" style="direction: ltr; text-align: left;">
+  <div class="mia-header" id="mia-header-element">
+    <div class="mia-header-title">
+      <span>Mia</span>
+      <span class="mia-badge" id="mia-badge-text">Beta</span>
+    </div>
+    <div class="mia-header-actions">
+      <button class="mia-action-btn" onclick="toggleMiaChat()" title="Minimize">_</button>
+      <button class="mia-action-btn" onclick="toggleMiaChat()" title="Close" style="font-weight:bold;">×</button>
+    </div>
+  </div>
+
+  <div class="mia-body" id="mia-chat-body">
+    <div class="mia-timeline">
+      <span id="mia-timeline-text">Today / اليوم</span>
+    </div>
+    
+    <div class="mia-msg-wrapper bot" id="mia-welcome-wrapper">
+      <div class="mia-avatar">
+        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80" alt="Mia AI">
+      </div>
+      <div class="mia-bubble-container">
+        <div class="mia-bubble">
+          Bonjour! Veuillez choisir votre langue pour commencer. <br>
+          مرحباً بك! يرجى اختيار لغتك المفضلة لبدء المحادثة.
+          
+          <div style="margin-top: 12px; display: flex; flex-direction: column; gap: 8px;" id="mia-lang-container">
+            <button onclick="selectMiaLanguage('ar')" style="background: var(--purple); color: white; border: none; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-weight: 600; font-family: 'Inter', sans-serif; text-align: center;">العربية</button>
+            <button onclick="selectMiaLanguage('mor')" style="background: #111; color: white; border: 1px solid var(--gray-border); padding: 8px 12px; border-radius: 8px; cursor: pointer; font-weight: 600; font-family: 'Inter', sans-serif; text-align: center;">الدارجة المغربية</button>
+            <button onclick="selectMiaLanguage('fr')" style="background: #111; color: white; border: 1px solid var(--gray-border); padding: 8px 12px; border-radius: 8px; cursor: pointer; font-weight: 600; font-family: 'Inter', sans-serif; text-align: center;">Français</button>
+            <button onclick="selectMiaLanguage('en')" style="background: #111; color: white; border: 1px solid var(--gray-border); padding: 8px 12px; border-radius: 8px; cursor: pointer; font-weight: 600; font-family: 'Inter', sans-serif; text-align: center;">English</button>
+          </div>
+        </div>
+        <div class="mia-time" id="mia-start-time">12:49</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mia-footer">
+    <div class="mia-input-box" id="mia-input-box-container">
+      <textarea id="mia-input" placeholder="Select a language first..." onkeydown="handleMiaKey(event)" disabled></textarea>
+      <button class="mia-send-btn" onclick="sendMiaMessage()" title="Send" id="mia-send-button-element">
+        <svg viewBox="0 0 24 24">
+          <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+        </svg>
+      </button>
+    </div>
+    <div class="mia-disclaimer" id="mia-disclaimer-text">
+      ⚠ AI-generated responses may contain inaccuracies. <a href="#services">More information</a>.
+    </div>
+  </div>
+</div>
+
+
+<script>
+  let currentYear, currentMonth;
+  let selectedFullDateStr = "";
+  
+  const dateInput = document.getElementById('bk-date');
+  const calendarPopup = document.getElementById('custom-calendar-popup');
+  const monthYearLabel = document.getElementById('calendar-month-year');
+  const daysContainer = document.getElementById('calendar-days-container');
+  const timeSelect = document.getElementById('bk-time');
+
+  // Initialize
+  const now = new Date();
+  currentYear = now.getFullYear();
+  currentMonth = now.getMonth();
+
+  // Set chat initial time dynamically to feel authentic
+  document.getElementById('mia-start-time').textContent = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+
+  function toggleCalendarPopup(event) {
+    event.stopPropagation();
+    if (calendarPopup.style.display === 'block') {
+      calendarPopup.style.display = 'none';
+    } else {
+      calendarPopup.style.display = 'block';
+      renderCalendar();
+    }
+  }
+
+  function changeCalendarMonth(direction) {
+    currentMonth += direction;
+    if (currentMonth < 0) {
+      currentMonth = 11;
+      currentYear--;
+    } else if (currentMonth > 11) {
+      currentMonth = 0;
+      currentYear++;
+    }
+    renderCalendar();
+  }
+
+  function renderCalendar() {
+    const monthNames = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
+    monthYearLabel.textContent = `${monthNames[currentMonth]} ${currentYear}`;
+    
+    daysContainer.innerHTML = '';
+    
+    const firstDayIndex = new Date(currentYear, currentMonth, 1).getDay();
+    const totalDays = new Date(currentYear, currentMonth + 1, 0).getDate();
+    
+    for (let i = 0; i < firstDayIndex; i++) {
+      const emptyDiv = document.createElement('div');
+      daysContainer.appendChild(emptyDiv);
+    }
+    
+    const todayStr = new Date().toISOString().split('T')[0];
+    
+    for (let day = 1; day <= totalDays; day++) {
+      const dayDiv = document.createElement('div');
+      dayDiv.className = 'calendar-day';
+      dayDiv.textContent = day;
+      
+      const loopDate = new Date(currentYear, currentMonth, day);
+      const loopDayOfWeek = loopDate.getDay();
+      const loopDateStr = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+      
+      const isAllowedDay = (loopDayOfWeek === 1 || loopDayOfWeek === 3 || loopDayOfWeek === 5);
+      const isPast = loopDateStr < todayStr;
+      
+      if (isAllowedDay && !isPast) {
+        dayDiv.classList.add('allowed');
+        if (loopDateStr === selectedFullDateStr) {
+          dayDiv.classList.add('selected');
+        }
+        
+        dayDiv.onclick = (e) => {
+          e.stopPropagation();
+          selectedFullDateStr = loopDateStr;
+          const formattedText = `${String(day).padStart(2, '0')}/${String(currentMonth + 1).padStart(2, '0')}/${currentYear}`;
+          dateInput.value = formattedText;
+          calendarPopup.style.display = 'none';
+          activateTimeSlots();
+        };
+      } else {
+        dayDiv.classList.add('disabled');
+        dayDiv.onclick = (e) => {
+          e.stopPropagation();
+        };
+      }
+      
+      daysContainer.appendChild(dayDiv);
+    }
+  }
+
+  document.addEventListener('click', function(event) {
+    if (!event.target.closest('.date-input-wrapper')) {
+      calendarPopup.style.display = 'none';
+    }
+  });
+
+  function activateTimeSlots() {
+    timeSelect.innerHTML = '';
+    const availableSlots = [
+      "09:00 - 10:00",
+      "10:30 - 11:30",
+      "14:00 - 15:00",
+      "15:30 - 16:30"
+    ];
+
+    timeSelect.disabled = false;
+    let initialOption = document.createElement('option');
+    initialOption.value = '';
+    initialOption.textContent = '-- Choisir un créneau --';
+    timeSelect.appendChild(initialOption);
+
+    availableSlots.forEach(slot => {
+      let option = document.createElement('option');
+      option.value = slot;
+      option.textContent = slot;
+      timeSelect.appendChild(option);
+    });
+  }
+
+  function generateBookingPDF(event) {
+    event.preventDefault();
+
+    const name = document.getElementById('bk-name').value;
+    const email = document.getElementById('bk-email').value;
+    const phone = document.getElementById('bk-phone').value;
+    const date = document.getElementById('bk-date').value;
+    const time = document.getElementById('bk-time').value;
+
+    if (!time) {
+      alert("Veuillez choisir un créneau horaire valide.");
+      return;
+    }
+
+    document.getElementById('pdf-out-name').textContent = name;
+    document.getElementById('pdf-out-email').textContent = email;
+    document.getElementById('pdf-out-phone').textContent = phone;
+    document.getElementById('pdf-out-date').textContent = date;
+    document.getElementById('pdf-out-time').textContent = time;
+
+    const element = document.getElementById('pdf-template');
+    element.style.display = 'block';
+
+    const opt = {
+      margin:       15,
+      filename:     'Rendez_vous_Rihanio_' + name.replace(/\s+/g, '_') + '.pdf',
+      image:        { type: 'jpeg', quality: 0.98 },
+      html2canvas:  { scale: 2, useCORS: true },
+      jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    };
+
+    html2pdf().set(opt).from(element).save().then(() => {
+      element.style.display = 'none';
+      alert("Félicitations ! Votre rendez-vous est validé et votre confirmation officielle PDF a été téléchargée.");
+      document.getElementById('main-booking-form').reset();
+      selectedFullDateStr = "";
+      timeSelect.disabled = true;
+      timeSelect.innerHTML = '<option value="">Sélectionnez d\'abord une date</option>';
+    }).catch(err => {
+      console.error(err);
+      element.style.display = 'none';
+    });
+  }
+// بدلاً من الـ setTimeout القديمة، سنقوم بالاتصال بـ API الذكاء الاصطناعي
+    try {
+        const response = await fetch('https://YOUR_WORKER_URL.workers.dev', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+                message: text, 
+                lang: selectedLanguage 
+            })
+        });
+
+        const data = await response.json();
+        const botResponse = data.reply; // الرد القادم من Gemini
+
+        const botMsgHTML = `
+            <div class="mia-msg-wrapper bot" style="flex-direction: ${config.flexDir}; align-self: flex-start;">
+                <div class="mia-avatar" style="${config.dir === 'rtl' ? 'margin-left:10px; margin-right:0;' : 'margin-right:10px; margin-left:0;'}">
+                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80" alt="Mia AI">
+                </div>
+                <div class="mia-bubble-container">
+                    <div class="mia-bubble" style="background: white; color: #111; ${config.dir === 'rtl' ? 'border-top-left-radius:14px; border-top-right-radius:2px;' : 'border-top-right-radius:14px; border-top-left-radius:2px;'}">${botResponse}</div>
+                    <div class="mia-time" style="align-self: ${config.dir === 'rtl' ? 'flex-start' : 'flex-end'};">${timeStr}</div>
+                </div>
+            </div>
+        `;
+        miaChatBody.insertAdjacentHTML('beforeend', botMsgHTML);
+        miaChatBody.scrollTop = miaChatBody.scrollHeight;
+
+    } catch (error) {
+        console.error("Error connecting to AI:", error);
+        // في حال فشل الاتصال، يمكنك ترك رد احتياطي بسيط
+  }
+</script>
 
 </body>
 </html>

@@ -1518,53 +1518,55 @@
       element.style.display = 'none';
     });
   }
-async function sendMiaMessage() {
-  const text = miaInput.value.trim();
-  if (!text) return;
+setTimeout(() => {
+      let botResponse = "";
+      const lowText = text.toLowerCase();
+      
+      // إضافة زر الحجز المشترك
+      const bookingButtonHTML = `<br><br><a href="#booking-section" style="display:inline-block; padding:8px 16px; background:var(--purple); color:white; text-decoration:none; border-radius:8px; font-weight:bold;">Réserver un Rendez-vous</a>`;
 
-  const timeStr = new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
-  const config = langInterfaces[selectedLanguage];
+      // منطق الردود الموسع
+      if (lowText.includes('اسمك') || lowText.includes('name') || lowText.includes('شكون نتي')) {
+        botResponse = selectedLanguage === 'ar' ? "أنا Mia، المساعد الذكي الخاص بـ Rihanio. أنا هنا لأجعل تجربتك أسهل وأكثر كفاءة!" : 
+                      selectedLanguage === 'mor' ? "أنا Mia، المساعد الذكي ديال Rihanio. موجودة باش نعاونك ونبسط ليك الأمور!" :
+                      "I am Mia, your virtual assistant at Rihanio. I'm here to make your experience seamless and efficient!";
+      } 
+      else if (lowText.includes('استشارة') || lowText.includes('conseil') || lowText.includes('consultation') || lowText.includes('بغينا نهضرو')) {
+        botResponse = (selectedLanguage === 'ar' ? "يسعدني جداً تقديم الاستشارة. " : 
+                       selectedLanguage === 'mor' ? "بكل فرح، الاستشارة هي أول خطوة للنجاح. " : 
+                       "I would be happy to provide a consultation. ") + "يمكنك حجز موعد مباشر مع خبيرنا عبر الزر أدناه:" + bookingButtonHTML;
+      }
+      else {
+        // الردود السابقة مع توسع بسيط
+        if (selectedLanguage === "ar") {
+          botResponse = "شكراً لتواصلك! في Rihanio، نسعى لتقديم حلول مبتكرة. ";
+          if (lowText.includes('اربنب') || lowText.includes('airbnb')) botResponse += "تتيح لك خدمة Airbnb Premium زيادة عوائدك بـ 40%. هل تود المضي قدماً في دراسة الجدوى؟";
+          else if (lowText.includes('موقع')) botResponse += "نحن نصمم مواقع استثنائية تجعل علامتك التجارية في الصدارة. كيف يمكنني مساعدتك في هذا الخصوص؟";
+          else botResponse += "كيف يمكنني مساعدتك أكثر اليوم؟";
+        }
+        else if (selectedLanguage === "mor") {
+          botResponse = "مرحبا بك! الفريق ديالنا فـ Rihanio واجد باش يعاونك. ";
+          if (lowText.includes('اربنب') || lowText.includes('دار')) botResponse += "تسيير Airbnb هو التخصص ديالنا. بغيتي نوجدوا ليك خطة باش تطلع أرباحك؟";
+          else if (lowText.includes('سيت')) botResponse += "السيتات لي كنقادو كيخدمو بـ أحدث التقنيات باش يجيبو ليك الكليان. عندك شي فكرة محددة؟";
+          else botResponse += "كاين شي حاجة أخرى نقدر نعاونك بها؟";
+        }
+        // ... (يمكنك إكمال بقية اللغات بنفس النمط)
+      }
 
-  // 1. عرض رسالة المستخدم فوراً
-  const userMsgHTML = `
-    <div class="mia-msg-wrapper user" style="flex-direction: ${config.flexDir}; align-self: flex-end;">
-      <div class="mia-bubble" style="background: var(--purple); color: var(--white);">${text}</div>
-    </div>
-  `;
-  miaChatBody.insertAdjacentHTML('beforeend', userMsgHTML);
-  miaInput.value = '';
-  miaChatBody.scrollTop = miaChatBody.scrollHeight;
-
-  // 2. الاتصال بـ Gemini API
-  try {
-    const API_KEY = "AQ.Ab8RN6Jfh94rS7n8w-lSphsIoKBbwgJYOj0HXsu5YCeWNMhSWA";
-    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        contents: [{
-          parts: [{ text: `أنت MIA مساعدة ذكية لشركة Rihanio. يجب أن ترد بنفس لغة المستخدم: ${selectedLanguage}. 
-          معلومات الشركة: نقدم خدمات إدارة Airbnb، وتطوير المواقع.
-          استفسار المستخدم: ${text}` }]
-        }]
-      })
-    });
-
-    const data = await response.json();
-    const botReply = data.candidates[0].content.parts[0].text;
-
-    // 3. عرض رد الذكاء الاصطناعي
-    const botMsgHTML = `
-      <div class="mia-msg-wrapper bot" style="flex-direction: ${config.flexDir}; align-self: flex-start;">
-        <div class="mia-bubble" style="background: white; color: #111;">${botReply}</div>
-      </div>
-    `;
-    miaChatBody.insertAdjacentHTML('beforeend', botMsgHTML);
-    miaChatBody.scrollTop = miaChatBody.scrollHeight;
-
-  } catch (error) {
-    console.error("Error:", error);
-    // إضافة رسالة خطأ بسيطة في حال فشل الاتصال
+      const botMsgHTML = `
+        <div class="mia-msg-wrapper bot" style="flex-direction: ${config.flexDir}; align-self: flex-start;">
+          <div class="mia-avatar" style="${config.dir === 'rtl' ? 'margin-left:10px; margin-right:0;' : 'margin-right:10px; margin-left:0;'}">
+            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80" alt="Mia AI">
+          </div>
+          <div class="mia-bubble-container">
+            <div class="mia-bubble" style="background: white; color: #111; ${config.dir === 'rtl' ? 'border-top-left-radius:14px; border-top-right-radius:2px;' : 'border-top-right-radius:14px; border-top-left-radius:2px;'}">${botResponse}</div>
+            <div class="mia-time" style="align-self: ${config.dir === 'rtl' ? 'flex-start' : 'flex-end'};">${timeStr}</div>
+          </div>
+        </div>
+      `;
+      miaChatBody.insertAdjacentHTML('beforeend', botMsgHTML);
+      miaChatBody.scrollTop = miaChatBody.scrollHeight;
+    }, 1000); // إضافة رسالة خطأ بسيطة في حال فشل الاتصال
   }
 
 </script>

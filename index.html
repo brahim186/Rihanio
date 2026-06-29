@@ -978,6 +978,33 @@
     height: 14px;
     fill: currentColor;
   }
+
+  /* Suggestions toggle button */
+  .mia-suggestions-btn {
+    background: rgba(94,23,235,0.1);
+    border: 1px solid rgba(94,23,235,0.25);
+    border-radius: 10px;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    flex-shrink: 0;
+    color: var(--purple);
+  }
+  .mia-suggestions-btn:hover {
+    background: var(--purple);
+    color: white;
+    border-color: var(--purple);
+    box-shadow: 0 0 10px rgba(94,23,235,0.35);
+  }
+  .mia-suggestions-btn svg {
+    width: 16px;
+    height: 16px;
+    fill: currentColor;
+  }
   
   .mia-disclaimer {
     font-size: 11px;
@@ -1073,9 +1100,9 @@
   </ul>
   <div class="nav-right">
     <div class="lang-switcher">
-      <button class="lang-btn active" id="lang-fr" onclick="setLanguage('fr')" style="order:1">FR</button>
-      <button class="lang-btn" id="lang-en" onclick="setLanguage('en')" style="order:2">EN</button>
-      <button class="lang-btn" id="lang-ar" onclick="setLanguage('ar')" style="order:3">ع</button>
+      <button class="lang-btn active" id="lang-fr" onclick="setLanguage('fr')">FR</button>
+      <button class="lang-btn" id="lang-en" onclick="setLanguage('en')">EN</button>
+      <button class="lang-btn" id="lang-ar" onclick="setLanguage('ar')">ع</button>
     </div>
     <a href="#rdv" class="btn-nav" id="nav-cta" data-i18n="nav_cta">Réserver un RDV</a>
   </div>
@@ -1182,9 +1209,9 @@
           </div>
         </div>
         <div style="flex:1;min-width:260px;">
-          <div class="card-pill" style="background:rgba(224,64,251,0.1);color:#e040fb;border-color:rgba(224,64,251,0.25);" data-i18n="s5_pill">Rhino Studio</div>
+          <div class="card-pill" style="background:rgba(224,64,251,0.1);color:#e040fb;border-color:rgba(224,64,251,0.25);" data-i18n="s5_pill">Rihanio Studio</div>
           <div class="card-title" data-i18n="s5_title">Services Audiovisuels Événementiels</div>
-          <div class="card-text" data-i18n="s5_text">Rhino Studio accompagne vos événements avec une expertise audiovisuelle sur-mesure. Nous capturons l'essence de vos moments forts à travers une approche cinématographique et professionnelle.</div>
+          <div class="card-text" data-i18n="s5_text">Rihanio Studio accompagne vos événements avec une expertise audiovisuelle sur-mesure. Nous capturons l'essence de vos moments forts à travers une approche cinématographique et professionnelle.</div>
         </div>
         <div style="flex:0 0 auto;display:flex;flex-direction:column;gap:10px;margin-top:4px;">
           <div style="background:rgba(224,64,251,0.08);border:1px solid rgba(224,64,251,0.2);border-radius:10px;padding:12px 18px;text-align:center;">
@@ -1368,6 +1395,11 @@
   <div class="mia-footer">
     <div class="mia-input-box" id="mia-input-box-container">
       <textarea id="mia-input" placeholder="Select a language first..." onkeydown="handleMiaKey(event)" disabled></textarea>
+      <button class="mia-suggestions-btn" onclick="toggleQuickChips()" title="Suggestions" id="mia-suggestions-toggle" disabled style="opacity:0.4; cursor:default;">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12zM7 9h10v2H7V9zm0-3h10v2H7V6zm0 6h7v2H7v-2z"/>
+        </svg>
+      </button>
       <button class="mia-send-btn" onclick="sendMiaMessage()" title="Send" id="mia-send-button-element">
         <svg viewBox="0 0 24 24">
           <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
@@ -1699,9 +1731,110 @@ Agence Digitale & Management`;
     ]
   };
 
+  // Predefined direct answers for quick chip questions (per language)
+  const quickAnswers = {
+    ar: {
+      "ما هي خدمات إدارة Airbnb التي تقدمونها؟": "نقدم إدارة شاملة لعقاراتك على Airbnb تشمل: تحسين الإعلانات، التواصل مع المسافرين 24/7، تنسيق تسجيل الدخول والخروج، وتنفيذ استراتيجيات لرفع معدل الإشغال بنسبة تصل إلى +40%. 🏠 هل تريد جدولة دراسة ربحية لعقارك؟",
+      "كيف تديرون حسابات وسائل التواصل الاجتماعي؟": "نتولى إنشاء المحتوى الكامل (صور ونصوص)، جدولة المنشورات، وتفاعل يومي مع جمهورك لبناء حضور رقمي قوي وجذب عملاء جدد. 📱 تواصل معنا لمناقشة استراتيجية مخصصة لعلامتك التجارية.",
+      "ما هي خدمات تصميم وتطوير المواقع الإلكترونية لديكم؟": "نصمم مواقع تعريفية ومتاجر إلكترونية حديثة وسريعة ومتجاوبة مع جميع الأجهزة، مع تحسين SEO لجذب أكبر عدد من الزوار وتحويلهم إلى عملاء. 🌐 احجز موعداً لمناقشة مشروعك!",
+      "ما هي خدمة دراسة الجدوى والنمذجة المالية؟": "نساعدك على تقييم الجدوى المالية لمشاريعك العقارية قبل الاستثمار. نُعدّ نماذج مالية دقيقة تتضمن التكاليف، العوائد المتوقعة، ونقطة التعادل لاتخاذ قرارات مستنيرة. 📊",
+      "كيف يمكنني حجز موعد مع فريق Rihanio؟": "يمكنك حجز موعدك مباشرة من قسم 'احجز موعداً' في الموقع. اختر يوماً متاحاً (الاثنين أو الأربعاء أو الجمعة) والوقت المناسب، وستصلك رسالة تأكيد على بريدك الإلكتروني. 📅",
+      "ما هي أسعار خدماتكم؟": "تختلف الأسعار حسب نوع الخدمة ونطاق المشروع. نوفر عروضاً مخصصة بعد فهم احتياجاتك. 💰 احجز استشارة مجانية الآن وسيقدم لك فريقنا عرضاً مفصلاً."
+    },
+    mor: {
+      "شنو هي الخدمات ديال تسيير Airbnb لي عندكم؟": "عندنا خدمة تسيير Airbnb شاملة: تحسين الإعلانات، التواصل مع الضيوف 24/7، تنسيق الدخول والخروج، وزيادة المداخيل بـ +40% فالمعدل. 🏠 بغيتي نديرو دراسة ربحية للدار ديالك؟",
+      "كيفاش كتديرو الحسابات ديال السوشيال ميديا؟": "كنديرو المحتوى كامل (صور ونصوص)، جدولة المنشورات، وتفاعل يومي مع الجمهور ديالك باش نبنيو ليك حضور قوي على النت ونجيبو ليك كليان جداد. 📱 كلمنا على المشروع ديالك!",
+      "شنو خدمات تصميم وبرمجة المواقع لي عندكم؟": "كنصممو سيتات ويب وماغازي إلكترونية عصرية وسريعة ومتجاوبة مع جميع الأجهزة، مع تحسين SEO باش يلقاوك الناس فgoogle. 🌐 شد رنديفو ومناقشنا المشروع ديالك!",
+      "شنو هي خدمة دراسة الربحية ديال المشاريع؟": "كنعاونوك تقيّم الجدوى المالية ديال مشروعك العقاري قبل ما تستثمر. كنديرو نماذج مالية دقيقة فيها التكاليف، الأرباح المتوقعة، ونقطة التعادل. 📊",
+      "كيفاش نشد رنديفو مع فريق Rihanio؟": "تقدر تشد الرنديفو ديالك مباشرة من قسم 'احجز موعداً' فالسيت. اختار النهار (الاثنين، الأربعاء، أو الجمعة) والوقت لي مسلك، وغادي يجيك تأكيد على الإيميل. 📅",
+      "شنو هي أثمنة الخدمات ديالكم؟": "الأثمنة كتختلف حسب نوع الخدمة وحجم المشروع. كنديرو عروض مخصصة بعد ما نفهمو احتياجاتك. 💰 شد استشارة مجانية دابا وفريقنا غادي يقدم ليك عرض مفصّل."
+    },
+    fr: {
+      "Quels sont vos services de gestion Airbnb ?": "Notre service Airbnb Premium comprend: l'optimisation de vos annonces, la communication avec les voyageurs 24/7, la coordination des check-in/out et des stratégies pour augmenter vos revenus de +40% en moyenne. 🏠 Souhaitez-vous planifier une étude de rentabilité ?",
+      "Comment gérez-vous les réseaux sociaux ?": "Nous prenons en charge la création de contenu complet (visuels et textes), la planification des publications et l'animation quotidienne de vos communautés pour bâtir une présence forte et attirer de nouveaux clients. 📱 Contactez-nous pour une stratégie personnalisée !",
+      "Quels sont vos services de création de site web ?": "Nous concevons des sites vitrines et e-commerce modernes, ultra-rapides, responsives et optimisés SEO pour maximiser vos conversions et votre visibilité sur Google. 🌐 Réservez un RDV pour discuter de votre projet !",
+      "En quoi consiste l'étude de rentabilité ?": "Nous analysons la viabilité financière de vos projets immobiliers avant tout investissement. Nos modèles incluent: coûts totaux, revenus prévisionnels, ROI et point mort pour des décisions éclairées. 📊",
+      "Comment prendre rendez-vous avec l'équipe Rihanio ?": "Réservez directement depuis la section 'Prendre RDV' sur notre site. Choisissez un créneau disponible (Lundi, Mercredi ou Vendredi) et l'heure qui vous convient. Vous recevrez une confirmation par email. 📅",
+      "Quels sont vos tarifs ?": "Nos tarifs varient selon le type de service et la portée du projet. Nous proposons des offres personnalisées après analyse de vos besoins. 💰 Réservez une consultation gratuite et notre équipe vous préparera un devis détaillé !"
+    },
+    en: {
+      "What Airbnb management services do you offer?": "Our Premium Airbnb service includes: listing optimization, 24/7 guest communication, check-in/out coordination, and revenue strategies that boost your income by +40% on average. 🏠 Would you like to schedule a profitability assessment?",
+      "How do you manage social media accounts?": "We handle full content creation (visuals and copy), post scheduling, and daily community engagement to build a strong online presence and attract new clients. 📱 Contact us for a personalized strategy!",
+      "What website design and development services do you offer?": "We design modern, fast, mobile-responsive showcase sites and e-commerce stores with SEO optimization to maximize your conversions and Google visibility. 🌐 Book a meeting to discuss your project!",
+      "What is the profitability study service?": "We analyze the financial viability of your real estate projects before you invest. Our models include: total costs, projected revenues, ROI, and break-even point for informed decisions. 📊",
+      "How can I book a meeting with Rihanio's team?": "Book directly from the 'Book a Meeting' section on our site. Choose an available slot (Monday, Wednesday or Friday) and your preferred time. You'll receive a confirmation email. 📅",
+      "What are your service prices?": "Our pricing varies depending on the service type and project scope. We offer personalized quotes after understanding your needs. 💰 Book a free consultation and our team will prepare a detailed proposal!"
+    }
+  };
+
   function sendQuickQuestion(text) {
     miaInput.value = text;
-    sendMiaMessage();
+    hideQuickChips();
+
+    const timeStr = new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+    const config = langInterfaces[selectedLanguage];
+
+    // Show user message
+    const userMsgHTML = `
+      <div class="mia-msg-wrapper user" style="flex-direction: ${config.flexDir}; align-self: flex-end;">
+        <div class="mia-avatar" style="background:#555; ${config.dir === 'rtl' ? 'margin-right:10px; margin-left:0;' : 'margin-left:10px; margin-right:0;'}">
+          <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&auto=format&fit=crop&q=80" alt="User">
+        </div>
+        <div class="mia-bubble-container">
+          <div class="mia-bubble" style="background: var(--purple); color: var(--white); ${config.dir === 'rtl' ? 'border-top-right-radius:14px; border-top-left-radius:2px;' : 'border-top-left-radius:14px; border-top-right-radius:2px;'}">${text}</div>
+          <div class="mia-time" style="align-self: ${config.dir === 'rtl' ? 'flex-end' : 'flex-start'};">${timeStr}</div>
+        </div>
+      </div>
+    `;
+    miaChatBody.insertAdjacentHTML('beforeend', userMsgHTML);
+    miaInput.value = '';
+    miaChatBody.scrollTop = miaChatBody.scrollHeight;
+
+    // Get direct answer from predefined map
+    const langAnswers = quickAnswers[selectedLanguage] || {};
+    const directAnswer = langAnswers[text] || getSmartFallback(text);
+
+    // Show brief typing indicator then answer
+    const typingId = 'typing-chip-' + Date.now();
+    const typingHTML = `
+      <div class="mia-msg-wrapper bot" id="${typingId}" style="flex-direction: ${config.flexDir}; align-self: flex-start;">
+        <div class="mia-avatar" style="${config.dir === 'rtl' ? 'margin-left:10px; margin-right:0;' : 'margin-right:10px; margin-left:0;'}">
+          <img src="${document.querySelector('.mia-msg-wrapper.bot .mia-avatar img') ? document.querySelector('.mia-msg-wrapper.bot .mia-avatar img').src : ''}" alt="Mia AI">
+        </div>
+        <div class="mia-bubble-container">
+          <div class="mia-bubble" style="background: white; color: #111;">
+            <span style="display:inline-flex;gap:4px;align-items:center;padding:2px 0;">
+              <span style="width:7px;height:7px;border-radius:50%;background:#bbb;animation:mia-dot 1.2s infinite ease-in-out;animation-delay:0s;display:inline-block;"></span>
+              <span style="width:7px;height:7px;border-radius:50%;background:#bbb;animation:mia-dot 1.2s infinite ease-in-out;animation-delay:0.2s;display:inline-block;"></span>
+              <span style="width:7px;height:7px;border-radius:50%;background:#bbb;animation:mia-dot 1.2s infinite ease-in-out;animation-delay:0.4s;display:inline-block;"></span>
+            </span>
+          </div>
+        </div>
+      </div>
+    `;
+    miaChatBody.insertAdjacentHTML('beforeend', typingHTML);
+    miaChatBody.scrollTop = miaChatBody.scrollHeight;
+
+    setTimeout(() => {
+      const typingEl = document.getElementById(typingId);
+      if (typingEl) typingEl.remove();
+
+      const replyTimeStr = new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+      const avatarSrc = document.querySelector('#mia-welcome-wrapper .mia-avatar img') ? document.querySelector('#mia-welcome-wrapper .mia-avatar img').src : '';
+      const botMsgHTML = `
+        <div class="mia-msg-wrapper bot" style="flex-direction: ${config.flexDir}; align-self: flex-start;">
+          <div class="mia-avatar" style="${config.dir === 'rtl' ? 'margin-left:10px; margin-right:0;' : 'margin-right:10px; margin-left:0;'}">
+            <img src="${avatarSrc}" alt="Mia AI">
+          </div>
+          <div class="mia-bubble-container">
+            <div class="mia-bubble" style="background: white; color: #111; ${config.dir === 'rtl' ? 'border-top-left-radius:14px; border-top-right-radius:2px;' : 'border-top-right-radius:14px; border-top-left-radius:2px;'}">${directAnswer}</div>
+            <div class="mia-time" style="align-self: ${config.dir === 'rtl' ? 'flex-start' : 'flex-end'};">${replyTimeStr}</div>
+          </div>
+        </div>
+      `;
+      miaChatBody.insertAdjacentHTML('beforeend', botMsgHTML);
+      miaChatBody.scrollTop = miaChatBody.scrollHeight;
+    }, 800);
   }
 
   function showQuickChips(lang) {
@@ -1721,6 +1854,15 @@ Agence Digitale & Management`;
   function hideQuickChips() {
     const chips = document.getElementById('mia-quick-chips');
     if (chips) chips.remove();
+  }
+
+  function toggleQuickChips() {
+    const existing = document.getElementById('mia-quick-chips');
+    if (existing) {
+      existing.remove();
+    } else {
+      showQuickChips(selectedLanguage);
+    }
   }
 
   function toggleMiaChat() {
@@ -1747,6 +1889,8 @@ Agence Digitale & Management`;
     miaWindow.style.textAlign = config.align;
     miaInput.placeholder = config.placeholder;
     miaInput.disabled = false;
+    const suggestBtn = document.getElementById('mia-suggestions-toggle');
+    if (suggestBtn) { suggestBtn.disabled = false; suggestBtn.style.opacity = '1'; suggestBtn.style.cursor = 'pointer'; }
     
     document.getElementById('mia-disclaimer-text').innerHTML = config.disclaimer;
     document.getElementById('mia-timeline-text').textContent = config.timeline;
@@ -1784,7 +1928,7 @@ Agence Digitale & Management`;
   // =============================================
   // ضع مفتاح Gemini API الخاص بك هنا
   // احصل عليه مجاناً من: https://aistudio.google.com/app/apikey
-  const GEMINI_API_KEY = "AQ.Ab8RN6Jfh94rS7n8w-lSphsIoKBbwgJYOj0HXsu5YCeWNMhSWA";
+  const GEMINI_API_KEY = "AQ.Ab8RN6KjtnK88VhseVMEBcZ26yqT4Ir_EcafQbrAK4WE26YeFg";
   // =============================================
 
   async function sendMiaMessage() {
@@ -1847,18 +1991,35 @@ Agence Digitale & Management`;
 - الردود يجب أن تكون مختصرة ومباشرة (3-4 جمل كحد أقصى)
 - لا تذكر أنك Gemini أو AI من Google، أنت MIA فقط`;
 
-      const response = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`,
+      // جرب gemini-2.0-flash أولاً ثم gemini-1.5-flash كبديل
+      let response = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             system_instruction: { parts: [{ text: systemPrompt }] },
-            contents: [{ parts: [{ text: text }] }],
+            contents: [{ role: "user", parts: [{ text: text }] }],
             generationConfig: { maxOutputTokens: 300, temperature: 0.7 }
           })
         }
       );
+
+      // إذا فشل النموذج الأول جرب الثاني
+      if (!response.ok) {
+        response = await fetch(
+          `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              system_instruction: { parts: [{ text: systemPrompt }] },
+              contents: [{ role: "user", parts: [{ text: text }] }],
+              generationConfig: { maxOutputTokens: 300, temperature: 0.7 }
+            })
+          }
+        );
+      }
 
       const data = await response.json();
       const typingEl = document.getElementById(typingId);
@@ -1867,8 +2028,10 @@ Agence Digitale & Management`;
       let botReply = "";
       if (data.candidates && data.candidates[0] && data.candidates[0].content) {
         botReply = data.candidates[0].content.parts[0].text;
+      } else if (data.error) {
+        console.warn("Gemini API error:", data.error.message);
+        botReply = getSmartFallback(text);
       } else {
-        // API أجابت لكن بدون محتوى → نستخدم الردود الذكية
         botReply = getSmartFallback(text);
       }
 
@@ -1997,6 +2160,11 @@ Agence Digitale & Management`;
       s3_text: "Prise en charge intégrale de vos biens en location de courte durée. Nous optimisons vos annonces pour maximiser le taux d'occupation, gérons la communication avec les voyageurs 24/7, coordonnons les entrées/sorties et mettons en place des stratégies pour offrir une expérience client irréprochable.",
       s4_title: "Étude de Rentabilité & Modélisation Financière",
       s4_text: "Nous aidons les entrepreneurs et les investisseurs immobiliers à valider la viabilité financière de leurs projets avant de s'engager.",
+      s5_pill: "Rihanio Studio",
+      s5_title: "Services Audiovisuels Événementiels",
+      s5_text: "Rihanio Studio accompagne vos événements avec une expertise audiovisuelle sur-mesure. Nous capturons l'essence de vos moments forts à travers une approche cinématographique et professionnelle.",
+      s5_stat1: "Cinématographique",
+      s5_stat2: "Sur-mesure",
       cta_card_title: "Prêt à scaler ?",
       cta_card_text: "Discutons de vos objectifs et construisons ensemble votre stratégie de croissance.",
       cta_card_btn: "Prendre rendez-vous →",
@@ -2049,6 +2217,11 @@ Agence Digitale & Management`;
       s3_text: "Full management of your short-term rental properties. We optimize your listings to maximize occupancy, handle guest communication 24/7, coordinate check-ins/outs, and implement strategies for an outstanding guest experience.",
       s4_title: "Profitability Study & Financial Modeling",
       s4_text: "We help entrepreneurs and real estate investors validate the financial viability of their projects before committing.",
+      s5_pill: "Rihanio Studio",
+      s5_title: "Event Audiovisual Services",
+      s5_text: "Rihanio Studio covers your events with tailor-made audiovisual expertise. We capture the essence of your key moments through a cinematic and professional approach.",
+      s5_stat1: "Cinematic",
+      s5_stat2: "Tailor-made",
       cta_card_title: "Ready to scale?",
       cta_card_text: "Let's discuss your goals and build your growth strategy together.",
       cta_card_btn: "Book a meeting →",
@@ -2101,6 +2274,11 @@ Agence Digitale & Management`;
       s3_text: "إدارة شاملة لعقاراتك المخصصة للإيجار القصير. نُحسّن إعلاناتك لرفع معدل الإشغال، ونتولى التواصل مع المسافرين على مدار 24/7، وننسّق عمليات تسجيل الدخول والخروج لتقديم تجربة لا تُنسى.",
       s4_title: "دراسة الجدوى والنمذجة المالية",
       s4_text: "نساعد رواد الأعمال والمستثمرين العقاريين على التحقق من الجدوى المالية لمشاريعهم قبل الالتزام بها.",
+      s5_pill: "Rihanio Studio",
+      s5_title: "الخدمات السمعية البصرية للفعاليات",
+      s5_text: "يرافق Rihanio Studio فعالياتك بخبرة سمعية بصرية مخصصة. نلتقط جوهر لحظاتك المميزة من خلال أسلوب سينمائي واحترافي.",
+      s5_stat1: "سينمائي",
+      s5_stat2: "مخصص",
       cta_card_title: "هل أنت مستعد للانطلاق؟",
       cta_card_text: "دعنا نناقش أهدافك ونبني استراتيجية نموك معاً.",
       cta_card_btn: "احجز موعداً →",
